@@ -20,7 +20,7 @@ export default function Register(){
     }
 
     function handleSubmit(){
-        fetch("http://192.168.0.106:8080/api/auth/checkUsername/" + formData.username)
+        fetch("http://192.168.0.105:8080/api/auth/checkUsername/" + formData.username)
         .then((response) => response.json())
         .then((data) => {
             if(data === false){
@@ -28,7 +28,7 @@ export default function Register(){
                 data.append("username", formData.username);
                 data.append("email", formData.email);
                 data.append("password", formData.password);
-                fetch("http://192.168.0.106:8080/api/auth/register", {
+                fetch("http://192.168.0.105:8080/api/auth/register", {
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json'
@@ -38,7 +38,7 @@ export default function Register(){
                 .then((response) => response.json())
                 .then((data) => console.log(data))
             }else{
-                console.log("Username already in use");
+                console.log("Bad username");
             }
         });
 

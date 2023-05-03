@@ -1,0 +1,86 @@
+import React from "react";
+import { Button } from "react-native";
+import { StyleSheet } from "react-native";
+import { TextInput } from "react-native";
+import { View } from "react-native";
+import { JWTContext } from "../JWTContext";
+import { useNavigation, CommonActions } from "@react-navigation/native";
+
+export default function NewPost(){
+    const navigation = useNavigation();
+    const {jwt} = React.useContext(JWTContext);
+    const [formData, setFormData] = React.useState({
+        title: "",
+        content: "",
+        groupName: "",
+        id: ""
+    });
+
+    function handleChange(field, text){
+        setFormData({...formData, [field]: text});
+    }
+
+    async function handleSubmit(){
+        const data = new FormData();
+        data.append("title", formData.title);
+        data.append("content", formData.content);
+        data.append("groupName", formData.groupName);
+        data.append("id", formData.id);
+        fetch("http://192.168.0.105:8080/post/new", {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${jwt}`,
+            },
+            body: data
+        });
+
+        navigation.dispatch(
+            CommonActions.navigate({
+                name: 'Home'
+            })
+        )
+    }
+
+    return (
+        <View style={styles.container}>
+            <View>
+                <TextInput 
+                    value={formData.title}
+                    onChangeText={(text) => handleChange('title', text)}
+                    style={styles.inputBox}
+                    placeholder="title"
+                />
+                <TextInput 
+                    value={formData.content}
+                    onChangeText={(text) => handleChange('content', text)}
+                    style={[styles.inputBox, {height: 150}]}
+                    placeholder="content"
+                    multiline={true}
+                />
+                <TextInput 
+                    value={formData.groupName}
+                    onChangeText={(text) => handleChange('groupName', text)}
+                    style={styles.inputBox}
+                    placeholder="groupName"
+                />
+            </View>
+            <Button onPress={() => handleSubmit()} title="Add Post" />
+        </View>
+    )
+}
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        justifyContent: 'space-around'
+    },
+    inputBox: {
+        borderColor: '#4D5B9E',
+        borderWidth: 0.2,
+        marginVertical: 5,
+        fontSize: 18,
+        padding: 12,
+        textAlignVertical: 'top',
+    },
+})

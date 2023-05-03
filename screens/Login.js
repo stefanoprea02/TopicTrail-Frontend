@@ -1,11 +1,13 @@
 import React from "react";
 import { View, Text, TextInput, TouchableWithoutFeedback, Animated, StyleSheet, Button } from "react-native";
 import { save, getValueFor } from "../Storage";
+import { JWTContext } from "../JWTContext";
 
 export default function Login(){
+    const {setJwt} = React.useContext(JWTContext);
     const [formData, setFormData] = React.useState({
-        username: "",
-        password: ""
+        username: "stefan",
+        password: "stefan"
     });
     const [errors, setErrors] = React.useState({
         username: [],
@@ -22,7 +24,7 @@ export default function Login(){
         const data = new FormData();
         data.append("username", formData.username);
         data.append("password", formData.password);
-        fetch("http://192.168.0.106:8080/api/auth/login", {
+        fetch("http://192.168.0.105:8080/api/auth/login", {
             method: 'POST',
             headers: {
                 'Accept': 'application/json'
@@ -31,6 +33,7 @@ export default function Login(){
         })
         .then((response) => response.text())
         .then((data) => {
+            setJwt(data);
             save(data);
         })
 
@@ -50,6 +53,7 @@ export default function Login(){
                 onChangeText={(text) => handleChange('password', text)}
                 style={styles.inputBox}
                 placeholder="password"
+                secureTextEntry={true}
             />
             <Button onPress={handleSubmit} title="Login" />
         </View>

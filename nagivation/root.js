@@ -3,39 +3,41 @@ import AuthenticationTabs from "./authTabs";
 import UserTabs from "./userTabs";
 import { View, Text } from "react-native";
 import { getValueFor } from "../Storage";
-
+import { JWTContext } from "../JWTContext";
 
 export default function Root() {
-    const [jwt, setJwt] = React.useState(null);
+    const { jwt } = React.useContext(JWTContext);
     const [isLoading, setIsLoading] = React.useState(true);
     const [isValid, setIsValid] = React.useState(null);
-
+  
     React.useEffect(() => {
-        async function fetchData(){
-            const res = await getValueFor();
-            setJwt(JSON.parse(res));
-        }
-        fetchData();
-    }, []);
-
-    if(jwt){
-        fetch("http://192.168.0.106:8080/api/auth/validate", {
-            credentials: 'include',
+      async function fetchData() {
+        setIsLoading(true);
+  
+        if (jwt) {
+          fetch('http://192.168.0.105:8080/api/auth/validate', {
             method: 'GET',
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${jwt}`
-            }
-        }).then((response) => response.text())
-          .then((data) => {
-            setIsValid(data);
-            setIsLoading(false);
-          });
-    }else{
-        return <AuthenticationTabs />
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${jwt}`,
+            },
+          })
+            .then((response) => response.text())
+            .then((data) => {
+              setIsValid(data);
+              setIsLoading(false);
+            });
+        } else {
+          setIsLoading(false);
+        }
+      }
+  
+      fetchData();
+    }, [jwt]);
+  
+    if (!isLoading && jwt && isValid === 'true') {
+      return <UserTabs />;
+    } else {
+      return <AuthenticationTabs />;
     }
-
-    return isLoading ? (
-        <View><Text>Loading...</Text></View>
-    ) : isValid === "true" ? <UserTabs /> : <AuthenticationTabs /> 
-}
+  }
