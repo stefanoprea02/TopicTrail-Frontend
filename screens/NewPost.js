@@ -3,12 +3,12 @@ import { Button } from "react-native";
 import { StyleSheet } from "react-native";
 import { TextInput } from "react-native";
 import { View } from "react-native";
-import { JWTContext } from "../JWTContext";
+import { JWTContext } from "../Context";
 import { useNavigation, CommonActions } from "@react-navigation/native";
 
 export default function NewPost(){
     const navigation = useNavigation();
-    const {jwt} = React.useContext(JWTContext);
+    const {jwt, ip} = React.useContext(JWTContext);
     const [formData, setFormData] = React.useState({
         title: "",
         content: "",
@@ -26,7 +26,7 @@ export default function NewPost(){
         data.append("content", formData.content);
         data.append("groupName", formData.groupName);
         data.append("id", formData.id);
-        fetch("http://192.168.0.105:8080/post/new", {
+        fetch(`${ip}/post/new`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',

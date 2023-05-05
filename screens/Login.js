@@ -1,10 +1,10 @@
 import React from "react";
 import { View, Text, TextInput, TouchableWithoutFeedback, Animated, StyleSheet, Button } from "react-native";
 import { save, getValueFor } from "../Storage";
-import { JWTContext } from "../JWTContext";
+import { JWTContext } from "../Context";
 
 export default function Login(){
-    const {setJwt} = React.useContext(JWTContext);
+    const {setJwt, ip} = React.useContext(JWTContext);
     const [formData, setFormData] = React.useState({
         username: "stefan",
         password: "stefan"
@@ -24,7 +24,7 @@ export default function Login(){
         const data = new FormData();
         data.append("username", formData.username);
         data.append("password", formData.password);
-        fetch("http://192.168.0.105:8080/api/auth/login", {
+        fetch(`${ip}/api/auth/login`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json'

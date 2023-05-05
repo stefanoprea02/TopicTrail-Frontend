@@ -1,8 +1,9 @@
 import React from "react";
-import { View, Text, TextInput, TouchableWithoutFeedback, Animated, StyleSheet, Button } from "react-native";
-import { save, getValueFor } from "../Storage";
+import { View, TextInput, StyleSheet, Button } from "react-native";
+import { JWTContext } from "../Context";
 
 export default function Register(){
+    const { ip } = React.useContext(JWTContext);
     const [formData, setFormData] = React.useState({
         username: "",
         email: "",
@@ -20,7 +21,7 @@ export default function Register(){
     }
 
     function handleSubmit(){
-        fetch("http://192.168.0.105:8080/api/auth/checkUsername/" + formData.username)
+        fetch(`${ip}/api/auth/checkUsername/` + formData.username)
         .then((response) => response.json())
         .then((data) => {
             if(data === false){
@@ -28,7 +29,7 @@ export default function Register(){
                 data.append("username", formData.username);
                 data.append("email", formData.email);
                 data.append("password", formData.password);
-                fetch("http://192.168.0.105:8080/api/auth/register", {
+                fetch(`${ip}/api/auth/register`, {
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json'

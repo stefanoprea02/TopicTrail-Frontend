@@ -1,21 +1,19 @@
 import React from "react";
 import AuthenticationTabs from "./authTabs";
 import UserTabs from "./userTabs";
-import { View, Text } from "react-native";
-import { getValueFor } from "../Storage";
-import { JWTContext } from "../JWTContext";
+import { JWTContext } from "../Context";
 
 export default function Root() {
-    const { jwt } = React.useContext(JWTContext);
+    const { jwt, ip } = React.useContext(JWTContext);
     const [isLoading, setIsLoading] = React.useState(true);
     const [isValid, setIsValid] = React.useState(null);
-  
+    
     React.useEffect(() => {
       async function fetchData() {
         setIsLoading(true);
   
         if (jwt) {
-          fetch('http://192.168.0.105:8080/api/auth/validate', {
+          fetch(`${ip}/api/auth/validate`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',

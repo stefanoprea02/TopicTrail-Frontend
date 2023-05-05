@@ -2,13 +2,13 @@ import React from "react";
 import { View, Text } from "react-native";
 import { Button } from "react-native";
 import { save } from "../Storage";
-import { JWTContext } from "../JWTContext";
+import { JWTContext } from "../Context";
 import { StyleSheet } from "react-native";
 import HomePost from "../components/HomePost";
 import { FlatList } from "react-native";
 
 export default function Home(){
-    const {jwt, setJwt} = React.useContext(JWTContext);
+    const {jwt, setJwt, ip} = React.useContext(JWTContext);
     const [posts, setPosts] = React.useState();
 
     function logout(){
@@ -18,7 +18,7 @@ export default function Home(){
 
     React.useEffect(() => {
         async function fetchData(){
-            let posts = await fetch("http://192.168.0.105:8080/post/all", {
+            let posts = await fetch(`${ip}/post/all`, {
                 method: 'GET',
                 headers: {
                     'Accept': 'application/json',
