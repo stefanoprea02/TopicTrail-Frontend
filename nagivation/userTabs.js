@@ -6,6 +6,7 @@ import FontAwesome from "react-native-vector-icons/FontAwesome"
 import Feather from "react-native-vector-icons/Feather"
 import Home from "../screens/Home";
 import NewPost from "../screens/NewPost";
+import NewGroup from "../screens/NewGroup";
 const Tab = createBottomTabNavigator();
 
 export default function UserTabs(){
@@ -42,10 +43,20 @@ export default function UserTabs(){
               }}
             />
             <Tab.Screen
-              name="New"
+              name="NewPost"
               component={NewPost}
               options={{
                 tabBarLabel: "New Post",
+                tabBarIcon: ({ color }) => (
+                  <AntDesign name="plussquareo" size={24} color={color} />
+                ),
+              }}
+            />
+            <Tab.Screen
+              name="NewGroup"
+              component={NewGroup}
+              options={{
+                tabBarLabel: "New Group",
                 tabBarIcon: ({ color }) => (
                   <AntDesign name="plussquareo" size={24} color={color} />
                 ),
