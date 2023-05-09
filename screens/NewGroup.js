@@ -1,10 +1,12 @@
 import React from "react";
-import { View,TextInput,Button } from "react-native";
+import { View,TextInput,Button,StyleSheet,navigation } from "react-native";
+import { useNavigation, CommonActions } from "@react-navigation/native";
 import { JWTContext } from "../Context";
 
 
 export default function NewGroup(){
     
+    const navigation = useNavigation();
     const {ip,jwt} = React.useContext(JWTContext);
     const [formData, setFormData]= React.useState({
         title: ''
@@ -44,4 +46,21 @@ export default function NewGroup(){
             <Button onPress={() => handleSubmit()} title="Add Group" />
         </View>
     );
+
+    
 }
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        justifyContent: 'space-around'
+    },
+    inputBox: {
+        borderColor: '#4D5B9E',
+        borderWidth: 0.2,
+        marginVertical: 5,
+        fontSize: 18,
+        padding: 12,
+        textAlignVertical: 'top',
+    },
+})
