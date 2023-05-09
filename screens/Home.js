@@ -1,15 +1,14 @@
 import React from "react";
-import { View, Text } from "react-native";
-import { Button } from "react-native";
+import { View, Button, StyleSheet, FlatList, Animated, TouchableWithoutFeedback, Modal } from "react-native";
 import { save } from "../Storage";
 import { JWTContext } from "../Context";
-import { StyleSheet } from "react-native";
 import HomePost from "../components/HomePost";
-import { FlatList } from "react-native";
+import BigPost from "../components/BigPost";
 
 export default function Home(){
     const {jwt, setJwt, ip} = React.useContext(JWTContext);
     const [posts, setPosts] = React.useState();
+    const [selectedPost, setSelectedPost] = React.useState(null);
 
     function logout(){
         setJwt("");
@@ -33,7 +32,13 @@ export default function Home(){
     }, []);
 
     const renderItem = ({ item }) => {
-        return <HomePost title={item.title} content={item.content} />;
+        return (
+            <TouchableWithoutFeedback onPress={()=>setSelectedPost(item)}>   
+                <Animated.View>
+                    <HomePost title={item.title} content={item.content} />
+                </Animated.View>
+            </TouchableWithoutFeedback>
+        );
     };
 
     return (
@@ -44,6 +49,12 @@ export default function Home(){
                 keyExtractor={(item) => item.id}
             />
             <Button title="Signout" onPress={logout} />
+            {selectedPost && 
+                <Modal visible={true} animationType="slide" style={styles.modalContainer}>
+                    <BigPost title={selectedPost.title} content={selectedPost.content} id={selectedPost.id} />
+                    <Button onPress={() => setSelectedPost(null)} title="Close" />
+                </Modal>
+            }
         </View>
     )
 }
@@ -53,5 +64,8 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'column',
         justifyContent: 'space-between'
+    },
+    modalContainer: {
+        flex: 1,
     }
 })
