@@ -9,7 +9,8 @@ export default function NewGroup(){
     const navigation = useNavigation();
     const {ip,jwt} = React.useContext(JWTContext);
     const [formData, setFormData]= React.useState({
-        title: ''
+        title: '',
+        description: ''
     });
 
     function handleChange(field, text){
@@ -19,6 +20,7 @@ export default function NewGroup(){
     async function handleSubmit(){
         const data = new FormData();
         data.append("title", formData.title);
+        data.append("description", formData.description);
         fetch(`${ip}/group/new`, {
             method: 'POST',
             headers: {
@@ -38,11 +40,17 @@ export default function NewGroup(){
     return (
         <View>
             <TextInput 
-                    value={formData.title}
-                    onChangeText={(text) => handleChange('title', text)}
-                    style={styles.inputBox}
-                    placeholder="name"
-                />
+                value={formData.title}
+                onChangeText={(text) => handleChange('title', text)}
+                style={styles.inputBox}
+                placeholder="name"
+            />
+            <TextInput 
+                value={formData.description}
+                onChangeText={(text) => handleChange('description', text)}
+                style={styles.inputBox}
+                placeholder="description"
+            />
             <Button onPress={() => handleSubmit()} title="Add Group" />
         </View>
     );

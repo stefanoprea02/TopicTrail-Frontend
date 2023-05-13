@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TextInput, Button } from "react-native";
 import { JWTContext } from "../Context";
 
 export default function BigPost(props){
-    const {setJwt, ip, jwt} = React.useContext(JWTContext);
+    const {ip, jwt} = React.useContext(JWTContext);
     const [formData, setFormData] = React.useState({
         content: ""
     });
@@ -47,15 +47,19 @@ export default function BigPost(props){
 
     return (
         <View style={styles.homePost}>
-            <Text style={styles.title}>{props.title}</Text>
-            <Text style={styles.content}>{props.content}</Text>
-            <TextInput 
-                value={formData.content}
-                onChangeText={(text) => handleChange('content', text)}
-                style={styles.inputBox}
-                placeholder="content"
-            />
-            <Button onPress={handleSubmit} title="New Comment" />
+            <View>
+                <Text style={styles.title}>{props.title}</Text>
+                <Text style={styles.content}>{props.content}</Text>
+            </View>
+            <View>
+                <TextInput 
+                    value={formData.content}
+                    onChangeText={(text) => handleChange('content', text)}
+                    style={styles.inputBox}
+                    placeholder="content"
+                />
+                <Button onPress={handleSubmit} title="New Comment" />
+            </View>
         </View>
     );
 }
@@ -63,7 +67,9 @@ export default function BigPost(props){
 const styles = StyleSheet.create({
     homePost:{
         marginVertical: 5,
-        padding: 10
+        padding: 10,
+        flex: 1,
+        justifyContent: 'space-between'
     },
     title:{
         fontSize: 25

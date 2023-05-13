@@ -12,8 +12,9 @@ export default function HomePost(props){
 
 const styles = StyleSheet.create({
     homePost:{
-        marginVertical: 5,
-        padding: 10
+        padding: 15,
+        borderBottomWidth: 0.2,
+        borderBottomColor: "grey"
     },
     title:{
         fontSize: 25

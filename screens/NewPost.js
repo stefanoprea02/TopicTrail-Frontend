@@ -12,7 +12,7 @@ export default function NewPost(){
     const [formData, setFormData] = React.useState({
         title: "",
         content: "",
-        groupName: "",
+        group: "",
         id: ""
     });
 
@@ -24,7 +24,7 @@ export default function NewPost(){
         const data = new FormData();
         data.append("title", formData.title);
         data.append("content", formData.content);
-        data.append("groupName", formData.groupName);
+        data.append("group", formData.group);
         data.append("id", formData.id);
         fetch(`${ip}/post/new`, {
             method: 'POST',
@@ -59,10 +59,10 @@ export default function NewPost(){
                     multiline={true}
                 />
                 <TextInput 
-                    value={formData.groupName}
-                    onChangeText={(text) => handleChange('groupName', text)}
+                    value={formData.group}
+                    onChangeText={(text) => handleChange('group', text)}
                     style={styles.inputBox}
-                    placeholder="groupName"
+                    placeholder="group"
                 />
             </View>
             <Button onPress={() => handleSubmit()} title="Add Post" />
@@ -73,7 +73,6 @@ export default function NewPost(){
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'space-around'
     },
     inputBox: {
         borderColor: '#4D5B9E',
