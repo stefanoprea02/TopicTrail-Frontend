@@ -5,6 +5,8 @@ import { JWTContext } from "../Context";
 import HomePost from "../components/HomePost";
 import BigPost from "../components/BigPost";
 import Icon from "react-native-vector-icons/AntDesign";
+import { adFavorite, checkFavorite, getGroupsContainingText, getUsersContainingText, removeFavorite } from "../Functions";
+import FontAwesome from "react-native-vector-icons/FontAwesome"
 
 export default function Home(){
     const {jwt, setJwt, ip} = React.useContext(JWTContext);
@@ -23,6 +25,8 @@ export default function Home(){
     const [group, setGroup] = React.useState(null);
     //tine minte userul care a fost selectat in bara de cautare
     const [user, setUser] = React.useState(null);
+    //tine minte daca postarea selectata este favorita sau nu
+    const [favorite, setFavorite] = React.useState(false);
 
     function logout(){
         setJwt("");
@@ -59,29 +63,22 @@ export default function Home(){
         fetchData();
     }, [aux, group, user]);
 
+    React.useEffect(() => {
+        async function fetchData(){
+            let fav = await checkFavorite(ip, jwt, selectedPost.id);
+            setFavorite(fav);
+        }
+        if(selectedPost)
+            fetchData();
+        else
+            setFavorite(false);
+    }, [selectedPost]);
+
     //pentru a cauta grupuri sau useri
     React.useEffect(() => {
         async function fetchData(){
-            let groups = await fetch(`${ip}/group/all?groupTitle=${searchText}`, {
-                method: 'GET',
-                headers: {
-                    'Accept': 'application/json',
-                    'Authorization': `Bearer ${jwt}`,
-                }
-            })
-            .then((response) => response.json())
-            .then((data) => data);
-
-            let users = await fetch(`${ip}/user/${searchText}`, {
-                method: 'GET',
-                headers: {
-                    'Accept': 'application/json',
-                    'Authorization': `Bearer ${jwt}`,
-                }
-            })
-            .then((response) => response.json())
-            .then((data) => data);
-
+            let groups = await getGroupsContainingText(ip, jwt, searchText);
+            let users = await getUsersContainingText(ip, jwt, searchText);
             setSearchResults([...groups, ...users]);
         }
         if(searchText.length >= 3)
@@ -186,9 +183,19 @@ export default function Home(){
             <Button title="Signout" onPress={logout} />
             {selectedPost && 
                 <Modal visible={true} animationType="slide" style={styles.modalContainer}>
+                    <View style={styles.topBar}>
                     <TouchableOpacity onPress={() => setSelectedPost(null)}>
                         <Icon name="left" style={styles.searchIcon} />
                     </TouchableOpacity>
+                    {favorite ? 
+                        <TouchableOpacity onPress={async () => { await removeFavorite(ip, jwt, selectedPost.id); setFavorite(false) }}>
+                            <FontAwesome name="bookmark" style={styles.searchIcon}></FontAwesome>
+                        </TouchableOpacity> :
+                        <TouchableOpacity onPress={async () => { await adFavorite(ip, jwt, selectedPost.id); setFavorite(true) }}>
+                            <FontAwesome name="bookmark-o" style={styles.searchIcon}></FontAwesome>
+                        </TouchableOpacity>
+                    }
+                    </View>
                     <BigPost title={selectedPost.title} content={selectedPost.content} id={selectedPost.id} />
                 </Modal>
             }
@@ -219,14 +226,15 @@ const styles = StyleSheet.create({
         padding: 10
     },
     searchIcon: {
-        fontSize: 95
+        fontSize: 50
     },
     topBar: {
         paddingTop: 10,
         paddingHorizontal: 15,
         flexDirection: "row",
         justifyContent: "space-between",
-        alignItems: "center"
+        alignItems: "center",
+        marginRight: 10
     },
     groupName: {
         fontSize: 20

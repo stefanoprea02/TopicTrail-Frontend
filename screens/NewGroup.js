@@ -3,7 +3,6 @@ import { View,TextInput,Button,StyleSheet,navigation } from "react-native";
 import { useNavigation, CommonActions } from "@react-navigation/native";
 import { JWTContext } from "../Context";
 
-
 export default function NewGroup(){
     
     const navigation = useNavigation();
