@@ -5,9 +5,7 @@ export async function adFavorite(ip, jwt, id) {
             'Accept': 'application/json',
             'Authorization': `Bearer ${jwt}`,
         }
-    })
-    .then((response) => response.json())
-    .then((data) => data)
+    });
 }
 
 export async function removeFavorite(ip, jwt, id) {
@@ -17,9 +15,7 @@ export async function removeFavorite(ip, jwt, id) {
             'Accept': 'application/json',
             'Authorization': `Bearer ${jwt}`,
         }
-    })
-    .then((response) => response.json())
-    .then((data) => data)
+    });
 }
 
 export async function checkFavorite(ip, jwt, id){

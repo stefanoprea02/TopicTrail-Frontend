@@ -1,6 +1,8 @@
 import React from "react";
-import { View, Text, StyleSheet, TextInput, Button } from "react-native";
+import { View, Text, StyleSheet, TextInput, FlatList, TouchableOpacity } from "react-native";
 import { JWTContext } from "../Context";
+import Comment from "./Comment";
+import AntDesign from "react-native-vector-icons/AntDesign"
 
 export default function BigPost(props) {
     const { ip, jwt } = React.useContext(JWTContext);
@@ -8,6 +10,7 @@ export default function BigPost(props) {
         content: ""
     });
     const [comments, setComments] = React.useState(null);
+    const [aux, setAux] = React.useState(false);
 
     function handleChange(field, text) {
         setFormData({ ...formData, [field]: text });
@@ -15,7 +18,7 @@ export default function BigPost(props) {
 
     React.useEffect(() => {
         async function fetchData() {
-            let comments = await fetch(`${ip}/comments/all/${props.id}`, {
+            let comments = await fetch(`${ip}/post/${props.id}/comment`, {
                 method: 'GET',
                 headers: {
                     'Accept': 'application/json',
@@ -27,12 +30,12 @@ export default function BigPost(props) {
             setComments(comments);
         }
         fetchData();
-    }, []);
+    }, [aux]);
 
     function handleSubmit() {
         const data = new FormData();
-        data.append("content", formData.content);
-        fetch(`${ip}/comment/new/${props.id}`, {
+        data.append("text", formData.content);
+        fetch(`${ip}/post/${props.id}/comment/new`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -40,26 +43,42 @@ export default function BigPost(props) {
             },
             body: data
         })
-            .then((response) => response.text())
-            .then((data) => {
-                console.log(data);
-            });
+        .then((response) => response.json())
+        .then((data) => {
+            setFormData({ ...formData, ['content']: "" });
+            setAux(!aux);
+        });
+    }
+
+    const renderComments = ({ item }) => {
+        return (
+            <Comment text={item.text} username={item.username} createdAt={item.createdAt} />
+        )
     }
 
     return (
         <View style={styles.homePost}>
-            <View>
+            <View style={styles.postDetails}>
                 <Text style={styles.title}>{props.title}</Text>
                 <Text style={styles.content}>{props.content}</Text>
             </View>
-            <View>
+            {comments && 
+                <FlatList 
+                    data={comments}
+                    renderItem={renderComments}
+                    keyExtractor={(item) => item.id}
+                />
+            }
+            <View style={styles.commentInput}>
                 <TextInput
                     value={formData.content}
                     onChangeText={(text) => handleChange('content', text)}
                     style={styles.inputBox}
-                    placeholder="content"
+                    placeholder="Add a new comment"
                 />
-                <Button onPress={handleSubmit} title="New Comment" />
+                <TouchableOpacity onPress={handleSubmit} style={styles.button}>
+                    <AntDesign name="right" style={styles.icon}></AntDesign>
+                </TouchableOpacity>
             </View>
         </View>
     );
@@ -79,14 +98,30 @@ const styles = StyleSheet.create({
         color: 'red',
         fontSize: 18
     },
+    postDetails:{
+        marginBottom: 10
+    },
     inputBox: {
         borderColor: '#4D5B9E',
         borderWidth: 0.2,
         marginVertical: 5,
         fontSize: 18,
-        padding: 12
+        padding: 12,
+        width: '85%'
+    },
+    button: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderColor: '#4D5B9E',
+        borderWidth: 0.2,
+        padding: 6
     },
     icon: {
-        fontSize: 40
+        fontSize: 39
+    },
+    commentInput: {
+        flexDirection: "row",
+        justifyContent: 'center',
+        alignItems: 'center',
     }
 })

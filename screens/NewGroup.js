@@ -2,6 +2,7 @@ import React from "react";
 import { View,TextInput,Button,StyleSheet,navigation } from "react-native";
 import { useNavigation, CommonActions } from "@react-navigation/native";
 import { JWTContext } from "../Context";
+import InputError from "../components/InputError";
 
 export default function NewGroup(){
     
@@ -11,6 +12,8 @@ export default function NewGroup(){
         title: '',
         description: ''
     });
+    const [error, setErrors] = React.useState(null);
+
 
     function handleChange(field, text){
         setFormData({...formData, [field]: text});
@@ -27,13 +30,31 @@ export default function NewGroup(){
                 'Authorization': `Bearer ${jwt}`,
             },
             body: data
+        })
+        .then((res) => res.json())
+        .then((data) => {
+            let e = [];
+            if(Object.keys(data).length <= 2){
+                const entries = Object.entries(data);
+                for(let [key, value] of entries){
+                    key = key.charAt(0).toUpperCase() + key.slice(1);
+                    value = value[0].charAt(0).toLowerCase() + value[0].slice(1);
+                    e.push(key + " " + value);
+                }
+                setErrors(e);
+            }else{
+                setFormData({
+                    title: '',
+                    description: ''
+                });
+                setErrors(null);
+                navigation.dispatch(
+                    CommonActions.navigate({
+                        name: 'Home'
+                    })
+                )
+            }
         });
-
-        navigation.dispatch(
-            CommonActions.navigate({
-                name: 'Home'
-            })
-        )
     }
 
     return (
@@ -50,6 +71,7 @@ export default function NewGroup(){
                 style={styles.inputBox}
                 placeholder="description"
             />
+            {error && <InputError errors={error} />}
             <Button onPress={() => handleSubmit()} title="Add Group" />
         </View>
     );

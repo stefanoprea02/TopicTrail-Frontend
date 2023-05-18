@@ -5,6 +5,9 @@ import { TextInput } from "react-native";
 import { View } from "react-native";
 import { JWTContext } from "../Context";
 import { useNavigation, CommonActions } from "@react-navigation/native";
+import { Dropdown } from "react-native-element-dropdown";
+import { getGroupsContainingText } from "../Functions";
+import InputError from "../components/InputError";
 
 export default function NewPost(){
     const navigation = useNavigation();
@@ -15,6 +18,8 @@ export default function NewPost(){
         group: "",
         id: ""
     });
+    const [groups, setGroups] = React.useState(null);
+    const [error, setErrors] = React.useState(null);
 
     function handleChange(field, text){
         setFormData({...formData, [field]: text});
@@ -33,14 +38,46 @@ export default function NewPost(){
                 'Authorization': `Bearer ${jwt}`,
             },
             body: data
+        })
+        .then((res) => res.json())
+        .then((data) => {
+            let e = [];
+            if(Object.keys(data).length <= 2){
+                const entries = Object.entries(data);
+                for(let [key, value] of entries){
+                    key = key.charAt(0).toUpperCase() + key.slice(1);
+                    value = value[0].charAt(0).toLowerCase() + value[0].slice(1);
+                    e.push(key + " " + value);
+                }
+                setErrors(e);
+            }else{
+                setFormData({
+                    title: "",
+                    content: "",
+                    group: "",
+                    id: ""
+                });
+                setErrors(null);
+                navigation.dispatch(
+                    CommonActions.navigate({
+                        name: 'Home'
+                    })
+                )
+            }
         });
-
-        navigation.dispatch(
-            CommonActions.navigate({
-                name: 'Home'
-            })
-        )
     }
+
+    console.log(formData);
+
+    React.useEffect(() => {
+        async function fetchData(){
+            let groups = await getGroupsContainingText(ip, jwt, "");
+            handleChange('group', groups[0].title);
+            let groupNames = groups.map(g => {return {value: g.title, label: g.title}});
+            setGroups(groupNames);
+        }
+        fetchData();
+    }, []);
 
     return (
         <View style={styles.container}>
@@ -58,13 +95,20 @@ export default function NewPost(){
                     placeholder="content"
                     multiline={true}
                 />
-                <TextInput 
-                    value={formData.group}
-                    onChangeText={(text) => handleChange('group', text)}
-                    style={styles.inputBox}
-                    placeholder="group"
-                />
+                {groups && 
+                    <Dropdown 
+                        selectedValue={formData.group}
+                        style={styles.dropdown}
+                        onChange={(text) => handleChange('group', text.value)}
+                        data={groups}
+                        labelField="label"
+                        valueField="value"
+                        maxHeight={300}
+                        value={formData.group}
+                    />
+                }
             </View>
+            {error && <InputError errors={error} />}
             <Button onPress={() => handleSubmit()} title="Add Post" />
         </View>
     )
@@ -82,4 +126,11 @@ const styles = StyleSheet.create({
         padding: 12,
         textAlignVertical: 'top',
     },
+    dropdown:{
+        fontSize: 18,
+        padding: 8,
+        borderColor: '#4D5B9E',
+        borderWidth: 0.2,
+        marginVertical: 5
+    }
 })

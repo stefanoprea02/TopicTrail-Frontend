@@ -65,6 +65,7 @@ export default function Register(){
                 onChangeText={(text) => handleChange('password', text)}
                 style={styles.inputBox}
                 placeholder="password"
+                secureTextEntry={true}
             />
             <Button onPress={handleSubmit} title="Register" />
         </View>
