@@ -9,6 +9,9 @@ export default function BigPost(props){
     });
     const [comments, setComments] = React.useState(null);
 
+    const [favorite,setFavorite] = React.useState(false);
+
+
     function handleChange(field, text){
         setFormData({...formData, [field]: text});
     }
@@ -35,7 +38,8 @@ export default function BigPost(props){
         fetch(`${ip}/comment/new/${props.id}`, {
             method: 'POST',
             headers: {
-                'Accept': 'application/json'
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${jwt}`,
             },
             body: data
         })
@@ -44,6 +48,52 @@ export default function BigPost(props){
             console.log(data);
         });
     }
+    
+    async function checkFavorite(){
+        fetch(`${ip}/post/checkFavorite/${props.id}`, {
+        method : 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${jwt}`,
+        }
+        }
+        ) . then( ( response ) => response.json() ) 
+         .then( (data) => setFavorite(data) )
+    }
+
+    React.useEffect(() => {
+        async function fetchData(){
+            let fav = await checkFavorite();
+            setFavorite(fav);
+        }
+        fetchData();
+    }, [])
+
+    async function adFavorite(){
+        console.log(props.id);
+        fetch(`${ip}/post/adFavorite/${props.id}`, {
+            method : 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${jwt}`,
+            }
+            }
+            ) . then( ( response ) => response.json() ) 
+             .then( (data) => data )
+    }
+
+    async function removeFavorite(){
+        fetch(`${ip}/post/removeFavorite/${props.id}`, {
+            method : 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${jwt}`,
+            }
+            }
+            ) . then( ( response ) => response.json() ) 
+             .then( (data) => data )
+    }
+    
 
     return (
         <View style={styles.homePost}>
@@ -58,6 +108,8 @@ export default function BigPost(props){
                     style={styles.inputBox}
                     placeholder="content"
                 />
+                {favorite ? <Button title="Mark as favorite" onPress={async() => {await adFavorite(); setFavorite(true)}}></Button> 
+                : <Button title="Unmark" onPress={async() => {await removeFavorite(); setFavorite(false)}}></Button>}
                 <Button onPress={handleSubmit} title="New Comment" />
             </View>
         </View>

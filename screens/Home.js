@@ -219,7 +219,7 @@ const styles = StyleSheet.create({
         padding: 10
     },
     searchIcon: {
-        fontSize: 35
+        fontSize: 95
     },
     topBar: {
         paddingTop: 10,
