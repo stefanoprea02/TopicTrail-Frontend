@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, StyleSheet, TextInput, FlatList, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, TextInput, FlatList, TouchableOpacity, ImageBackground } from "react-native";
 import { JWTContext } from "../Context";
 import Comment from "./Comment";
 import AntDesign from "react-native-vector-icons/AntDesign"
@@ -57,6 +57,8 @@ export default function BigPost(props) {
     }
 
     return (
+        <ImageBackground source={require("../components/Background.jpeg")} style={styles.backgroundImage}>
+        <View style={styles.container}>
         <View style={styles.homePost}>
             <View style={styles.postDetails}>
                 <Text style={styles.title}>{props.title}</Text>
@@ -81,6 +83,8 @@ export default function BigPost(props) {
                 </TouchableOpacity>
             </View>
         </View>
+        </View>
+        </ImageBackground>
     );
 }
 
@@ -91,13 +95,13 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'space-between'
     },
-    title: {
-        fontSize: 25
+    title:{
+        fontSize: 35,
+        textAlign: "center",
+        marginBottom: 15,
+        
     },
-    content: {
-        color: 'red',
-        fontSize: 18
-    },
+
     postDetails:{
         marginBottom: 10
     },
@@ -120,8 +124,28 @@ const styles = StyleSheet.create({
         fontSize: 39
     },
     commentInput: {
+
         flexDirection: "row",
-        justifyContent: 'center',
+        justifyContent: 'down',
         alignItems: 'center',
-    }
+        backgroundColor: '#F0F8FF',
+    },
+    backgroundImage: {
+        flex: 1,
+        resizeMode: 'cover',
+        width: '100%',
+        height: '100%',
+    },
+    container: {
+        flex: 1,
+        justifyContent: 'space-around'
+    },
+    content:{
+        color: 'black',
+        fontSize: 21,
+        borderTopWidth: 20,
+        borderBottomWidth: 40,
+        borderColor: 'black',
+
+    },
 })

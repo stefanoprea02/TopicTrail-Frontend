@@ -1,4 +1,5 @@
 import React from "react";
+import { ImageBackground, TouchableOpacity, Text } from 'react-native';
 import { Button } from "react-native";
 import { StyleSheet } from "react-native";
 import { TextInput } from "react-native";
@@ -80,18 +81,18 @@ export default function NewPost(){
     }, []);
 
     return (
-        <View style={styles.container}>
-            <View>
+        <ImageBackground source={require("../screens/Background.jpeg")} style={styles.backgroundImage}>
+            <View style={styles.container}>
                 <TextInput 
                     value={formData.title}
                     onChangeText={(text) => handleChange('title', text)}
-                    style={styles.inputBox}
+                    style={styles.inputBox1}
                     placeholder="title"
                 />
                 <TextInput 
                     value={formData.content}
                     onChangeText={(text) => handleChange('content', text)}
-                    style={[styles.inputBox, {height: 150}]}
+                    style={[styles.inputBox2, {height: 150}]}
                     placeholder="content"
                     multiline={true}
                 />
@@ -109,8 +110,11 @@ export default function NewPost(){
                 }
             </View>
             {error && <InputError errors={error} />}
-            <Button onPress={() => handleSubmit()} title="Add Post" />
-        </View>
+            {/* <Button onPress={() => handleSubmit()} title="Add Post" /> */}
+            <TouchableOpacity style={styles.button} onPress={() => handleSubmit()} title="Add Group">
+                <Text style={styles.buttonText}>Add Post</Text>
+            </TouchableOpacity>
+        </ImageBackground>
     )
 }
 
@@ -126,11 +130,63 @@ const styles = StyleSheet.create({
         padding: 12,
         textAlignVertical: 'top',
     },
-    dropdown:{
-        fontSize: 18,
-        padding: 8,
+    inputBox1: {
         borderColor: '#4D5B9E',
-        borderWidth: 0.2,
-        marginVertical: 5
-    }
+        borderWidth: 0.5,
+        marginVertical: 5,
+        fontSize: 25,
+        padding: 30,
+        marginTop: 25,
+        marginLeft: 30,
+        marginRight: 30,
+        backgroundColor: '#F0FFFF',
+        textAlignVertical: 'top',
+        textAlign:"center",
+    },
+    inputBox2: {
+        borderColor: '#4D5B9E',
+        borderWidth: 0.5,
+        marginVertical: 25,
+        fontSize: 18,
+        padding: 60,
+        marginLeft: 30,
+        marginRight: 30,
+        backgroundColor: '#F0FFFF',
+        textAlignVertical: 'top',
+        maxHeight: 300,
+        
+    },
+    dropdown:{
+        borderColor: '#4D5B9E',
+        borderWidth: 0.5,
+        marginVertical: 50,
+        fontSize: 18,
+        padding: 13,
+        marginLeft: 45,
+        marginRight: 45,
+        backgroundColor: '#F0F8FF',
+        textAlignVertical: 'top',
+        textAlign:"center",
+    },
+    backgroundImage: {
+        flex: 1,
+        resizeMode: 'cover',
+        width: '100%',
+        height: '100%',
+    },
+    button: {
+        backgroundColor: '#4D5B9E',
+        borderRadius: 5,
+        paddingVertical: 12,
+        marginTop: 20,
+        alignItems: 'center',
+        marginLeft: 35,
+        marginRight: 35,
+        marginBottom: 20,
+      },
+      buttonText: {
+        color: '#FFFFFF',
+        fontSize: 18,
+        fontWeight: 'bold',
+      },
 })

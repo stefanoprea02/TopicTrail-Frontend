@@ -1,5 +1,6 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { ImageBackground, TouchableOpacity, Text } from 'react-native';
+import { View,TextInput,Button,StyleSheet,navigation } from "react-native";
 
 export default function HomePost(props){
     return (
@@ -13,14 +14,19 @@ export default function HomePost(props){
 const styles = StyleSheet.create({
     homePost:{
         padding: 15,
-        borderBottomWidth: 0.2,
+        borderBottomWidth: 1,
         borderBottomColor: "grey"
     },
     title:{
-        fontSize: 25
+        fontSize: 25,
+        textAlign: "center",
+        marginTop: 20,
+        marginBottom: 10,
+        
     },
     content:{
-        color: 'red',
-        fontSize: 18
-    }
+        color: 'grey',
+        fontSize: 18,
+
+    },
 })
