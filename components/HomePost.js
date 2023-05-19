@@ -25,8 +25,7 @@ const styles = StyleSheet.create({
         
     },
     content:{
-        color: 'grey',
+        color: 'black',
         fontSize: 18,
-
     },
 })

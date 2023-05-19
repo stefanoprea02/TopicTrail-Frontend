@@ -126,7 +126,6 @@ const styles = StyleSheet.create({
     commentInput: {
 
         flexDirection: "row",
-        justifyContent: 'down',
         alignItems: 'center',
         backgroundColor: '#F0F8FF',
     },
@@ -143,8 +142,8 @@ const styles = StyleSheet.create({
     content:{
         color: 'black',
         fontSize: 21,
-        borderTopWidth: 20,
-        borderBottomWidth: 40,
+        borderTopWidth: 2,
+        borderBottomWidth: 2,
         borderColor: 'black',
 
     },

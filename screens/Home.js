@@ -134,9 +134,8 @@ export default function Home() {
 
   return (
     <ImageBackground source={require("../screens/Background.jpeg")} style={styles.backgroundImage}>
-
       <View style={styles.topBar}>
-        <TouchableOpacity onPress={() => setGroup(null)}>
+        <TouchableOpacity onPress={() => {setUser(null); setGroup(null)}}>
           <Icon name="left" style={styles.searchIcon} />
         </TouchableOpacity>
         {group &&
@@ -230,8 +229,8 @@ export default function Home() {
       borderRadius: 8,
       fontSize: 18,
       padding: 12,
-      marginBottom: 10,
       backgroundColor: '#FFFFFF',
+      width: '85%'
     },
     searchResult: {
       fontSize: 18,
@@ -241,7 +240,6 @@ export default function Home() {
       color: '#4D5B9E',
     },
     searchIcon: {
-        marginTop: 20,
       fontSize: 30,
       color: '#4D5B9E',
     },

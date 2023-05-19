@@ -2,6 +2,8 @@ import React from "react";
 import { ImageBackground, TouchableOpacity, Text } from 'react-native';
 import { View, TextInput, StyleSheet, Button } from "react-native";
 import { JWTContext } from "../Context";
+import { useNavigation, CommonActions } from "@react-navigation/native";
+import InputError from "../components/InputError";
 
 export default function Register(){
     const { ip } = React.useContext(JWTContext);
@@ -10,12 +12,9 @@ export default function Register(){
         email: "",
         password: ""
     });
-    const [errors, setErrors] = React.useState({
-        username: [],
-        email: [],
-        password: []
-    });
+    const [error, setErrors] = React.useState(null);
     const [submited, setSubmited] = React.useState(false);
+    const navigation = useNavigation();
 
     function handleChange(field, text){
         setFormData({...formData, [field]: text});
@@ -37,8 +36,31 @@ export default function Register(){
                     },
                     body: data
                 })
-                .then((response) => response.json())
-                .then((data) => console.log(data))
+                .then((res) => res.json())
+                .then((data) => {
+                    let e = [];
+                    if(Object.keys(data).length <= 2){
+                        const entries = Object.entries(data);
+                        for(let [key, value] of entries){
+                            key = key.charAt(0).toUpperCase() + key.slice(1);
+                            value = value[0].charAt(0).toLowerCase() + value[0].slice(1);
+                            e.push(key + " " + value);
+                        }
+                        setErrors(e);
+                    }else{
+                        setFormData({
+                            username: "",
+                            email: "",
+                            password: ""
+                        });
+                        setErrors(null);
+                        navigation.dispatch(
+                            CommonActions.navigate({
+                                name: 'Login'
+                            })
+                        )
+                    }
+                });
             }else{
                 console.log("Bad username");
             }
@@ -69,6 +91,7 @@ export default function Register(){
                 placeholder="password"
                 secureTextEntry={true}
             />
+            {error && <InputError errors={error} />}
             {/* <Button onPress={handleSubmit} title="Register" /> */}
             <TouchableOpacity style={styles.button} onPress={() => handleSubmit()} title="Register">
                 <Text style={styles.buttonText}>Register</Text>

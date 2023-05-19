@@ -7,7 +7,6 @@ import InputError from "../components/InputError";
 
 
 export default function NewGroup(){
-    
     const navigation = useNavigation();
     const {ip,jwt} = React.useContext(JWTContext);
     const [formData, setFormData]= React.useState({
