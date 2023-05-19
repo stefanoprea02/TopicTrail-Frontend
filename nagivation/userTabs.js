@@ -26,7 +26,7 @@ export default function UserTabs(){
                   {
                     "display": "flex",
                     "padding": 5,
-                    "height": 55
+                    "height": 80,
                   },
                   null
               ]
@@ -58,7 +58,7 @@ export default function UserTabs(){
               options={{
                 tabBarLabel: "New Group",
                 tabBarIcon: ({ color }) => (
-                  <AntDesign name="plussquareo" size={24} color={color} />
+                  <AntDesign name="addusergroup" size={24} color={color} />
                 ),
               }}
             />

@@ -24,7 +24,7 @@ export default function AuthenticationTabs(){
                   {
                     "display": "flex",
                     "padding": 5,
-                    "height": 55
+                    "height": 80
                   },
                   null
               ]

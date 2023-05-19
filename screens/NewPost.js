@@ -87,13 +87,13 @@ export default function NewPost(){
                     value={formData.title}
                     onChangeText={(text) => handleChange('title', text)}
                     style={styles.inputBox1}
-                    placeholder="title"
+                    placeholder="Title"
                 />
                 <TextInput 
                     value={formData.content}
                     onChangeText={(text) => handleChange('content', text)}
                     style={[styles.inputBox2, {height: 150}]}
-                    placeholder="content"
+                    placeholder="Content"
                     multiline={true}
                 />
                 {groups && 
@@ -121,6 +121,7 @@ export default function NewPost(){
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        alignItems: 'center'
     },
     inputBox: {
         borderColor: '#4D5B9E',
@@ -137,11 +138,10 @@ const styles = StyleSheet.create({
         fontSize: 25,
         padding: 30,
         marginTop: 25,
-        marginLeft: 30,
-        marginRight: 30,
         backgroundColor: '#F0FFFF',
         textAlignVertical: 'top',
         textAlign:"center",
+        width:'90%',
     },
     inputBox2: {
         borderColor: '#4D5B9E',
@@ -149,11 +149,10 @@ const styles = StyleSheet.create({
         marginVertical: 25,
         fontSize: 18,
         padding: 60,
-        marginLeft: 30,
-        marginRight: 30,
         backgroundColor: '#F0FFFF',
         textAlignVertical: 'top',
         maxHeight: 300,
+        width:'90%',
         
     },
     dropdown:{
@@ -162,8 +161,7 @@ const styles = StyleSheet.create({
         marginVertical: 50,
         fontSize: 18,
         padding: 13,
-        marginLeft: 45,
-        marginRight: 45,
+        width:'80%',
         backgroundColor: '#F0F8FF',
         textAlignVertical: 'top',
         textAlign:"center",

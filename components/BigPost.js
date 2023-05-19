@@ -93,7 +93,8 @@ const styles = StyleSheet.create({
         marginVertical: 5,
         padding: 10,
         flex: 1,
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        marginTop: 30,
     },
     title:{
         fontSize: 35,
@@ -124,10 +125,9 @@ const styles = StyleSheet.create({
         fontSize: 39
     },
     commentInput: {
-
         flexDirection: "row",
         alignItems: 'center',
-        backgroundColor: '#F0F8FF',
+        padding: 10
     },
     backgroundImage: {
         flex: 1,

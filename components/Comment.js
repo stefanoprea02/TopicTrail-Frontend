@@ -1,5 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
+import Icon from "react-native-vector-icons/AntDesign";
+import AntDesign from "react-native-vector-icons/AntDesign"
 
 export default function Comment(props){
     if(props.createdAt[1][0] !== '0' && props.createdAt[1] < 10)
@@ -7,7 +9,7 @@ export default function Comment(props){
     return (
         <View style={styles.comment}>
             <View style={styles.topBar}>
-                <Text style={styles.username}>{props.username}</Text>
+                <Text style={styles.username}><Icon name="user"/>{props.username}</Text>
                 <Text style={styles.username}>{props.createdAt[2]} {props.createdAt[1]} {props.createdAt[0]}</Text>
             </View>
             <Text style={styles.comText}>{props.text}</Text>

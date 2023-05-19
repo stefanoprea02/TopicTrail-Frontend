@@ -154,7 +154,9 @@ export default function Home() {
         </View>
       }
       {isSearching &&
+       
         <Modal visible={true}>
+          <ImageBackground source={require("../screens/Background.jpeg")} style={styles.backgroundImage}>
           <View style={styles.modalContainer}>
             <View style={styles.topBar}>
               <TouchableOpacity onPress={() => setIsSearching(false)}>
@@ -174,7 +176,9 @@ export default function Home() {
                 keyExtractor={(item) => item.id}
               />}
           </View>
-        </Modal>
+        
+        </ImageBackground>
+         </Modal>
       }
       <FlatList
         data={posts}
@@ -233,11 +237,12 @@ export default function Home() {
       width: '85%'
     },
     searchResult: {
-      fontSize: 18,
+      fontSize: 25,
       padding: 10,
       borderBottomWidth: 1,
-      borderBottomColor: '#4D5B9E',
-      color: '#4D5B9E',
+      borderBottomColor: 'lightblue',
+      color: 'lightblue',
+    
     },
     searchIcon: {
       fontSize: 30,
@@ -250,6 +255,7 @@ export default function Home() {
       justifyContent: 'space-between',
       alignItems: 'center',
       marginBottom: 10,
+      marginTop: 30,
     },
     groupName: {
       fontSize: 24,
