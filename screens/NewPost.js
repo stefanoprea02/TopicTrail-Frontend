@@ -1,9 +1,5 @@
 import React from "react";
-import { ImageBackground, TouchableOpacity, Text } from 'react-native';
-import { Button } from "react-native";
-import { StyleSheet } from "react-native";
-import { TextInput } from "react-native";
-import { View } from "react-native";
+import { ImageBackground, TouchableOpacity, Text, StyleSheet, TextInput, View } from 'react-native';
 import { JWTContext } from "../Context";
 import { useNavigation, CommonActions } from "@react-navigation/native";
 import { Dropdown } from "react-native-element-dropdown";
@@ -68,14 +64,14 @@ export default function NewPost(){
         });
     }
 
-    console.log(formData);
-
     React.useEffect(() => {
         async function fetchData(){
             let groups = await getGroupsContainingText(ip, jwt, "");
-            handleChange('group', groups[0].title);
-            let groupNames = groups.map(g => {return {value: g.title, label: g.title}});
-            setGroups(groupNames);
+            if(groups.length != 0){
+                handleChange('group', groups[0].title);
+                let groupNames = groups.map(g => {return {value: g.title, label: g.title}});
+                setGroups(groupNames);
+            }
         }
         fetchData();
     }, []);
@@ -181,10 +177,10 @@ const styles = StyleSheet.create({
         marginLeft: 35,
         marginRight: 35,
         marginBottom: 20,
-      },
-      buttonText: {
-        color: '#FFFFFF',
-        fontSize: 18,
-        fontWeight: 'bold',
-      },
+    },
+    buttonText: {
+    color: '#FFFFFF',
+    fontSize: 18,
+    fontWeight: 'bold',
+    },
 })

@@ -155,8 +155,8 @@ export default function Home() {
       }
       {isSearching &&
        
-        <Modal visible={true}>
-          <ImageBackground source={require("../screens/Background.jpeg")} style={styles.backgroundImage}>
+      <Modal visible={true}>
+        <ImageBackground source={require("../screens/Background.jpeg")} style={styles.backgroundImage}>
           <View style={styles.modalContainer}>
             <View style={styles.topBar}>
               <TouchableOpacity onPress={() => setIsSearching(false)}>
@@ -178,7 +178,7 @@ export default function Home() {
           </View>
         
         </ImageBackground>
-         </Modal>
+      </Modal>
       }
       <FlatList
         data={posts}
@@ -193,8 +193,8 @@ export default function Home() {
       />
       {/* <Button title="Sign out" onPress={logout} /> */}
       <TouchableOpacity style={styles.button} onPress={logout} title="Sign out">
-                <Text style={styles.buttonText}>Sign out</Text>
-            </TouchableOpacity>
+        <Text style={styles.buttonText}>Sign out</Text>
+      </TouchableOpacity>
       {selectedPost &&
         <Modal visible={true} animationType="slide" style={styles.modalContainer}>
           <View style={styles.topBar}>
@@ -210,16 +210,22 @@ export default function Home() {
               </TouchableOpacity>
             }
           </View>
-          <BigPost title={selectedPost.title} content={selectedPost.content} id={selectedPost.id} />
+          <BigPost 
+            title={selectedPost.title} 
+            content={selectedPost.content} 
+            id={selectedPost.id} 
+            username={selectedPost.username} 
+            group={selectedPost.group}
+          />
         </Modal>
       }
     </ImageBackground>
   )
-}const styles = StyleSheet.create({
+}
+const styles = StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor: '#F4F6FB',
-      padding: 10,
     },
     modalContainer: {
       flex: 1,
@@ -242,7 +248,6 @@ export default function Home() {
       borderBottomWidth: 1,
       borderBottomColor: 'lightblue',
       color: 'lightblue',
-    
     },
     searchIcon: {
       fontSize: 30,
@@ -255,7 +260,6 @@ export default function Home() {
       justifyContent: 'space-between',
       alignItems: 'center',
       marginBottom: 10,
-      marginTop: 30,
     },
     groupName: {
       fontSize: 24,

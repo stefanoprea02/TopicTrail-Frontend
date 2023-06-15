@@ -1,8 +1,11 @@
 import React from "react";
-import { View, Text, StyleSheet, TextInput, FlatList, TouchableOpacity, ImageBackground } from "react-native";
+import { View, Text, StyleSheet, TextInput, FlatList, TouchableOpacity, ImageBackground, TouchableWithoutFeedback, Animated, Modal } from "react-native";
 import { JWTContext } from "../Context";
 import Comment from "./Comment";
-import AntDesign from "react-native-vector-icons/AntDesign"
+import AntDesign from "react-native-vector-icons/AntDesign";
+import Icon from "react-native-vector-icons/AntDesign";
+import User from "./User";
+import { isAdmin, isModerator, removePost } from "../Functions";
 
 export default function BigPost(props) {
     const { ip, jwt } = React.useContext(JWTContext);
@@ -11,6 +14,9 @@ export default function BigPost(props) {
     });
     const [comments, setComments] = React.useState(null);
     const [aux, setAux] = React.useState(false);
+    const [selectedUser, setSelectedUser] = React.useState(null);
+    const [userIsAdmin, setIsAdmin] = React.useState(false);
+    const [userIsMod, setIsMod] = React.useState(false);
 
     function handleChange(field, text) {
         setFormData({ ...formData, [field]: text });
@@ -18,6 +24,10 @@ export default function BigPost(props) {
 
     React.useEffect(() => {
         async function fetchData() {
+            let a = await isAdmin(ip, jwt);
+            setIsAdmin(a);
+            let m = await isModerator(ip, jwt, props.group);
+            setIsMod(m);
             let comments = await fetch(`${ip}/post/${props.id}/comment`, {
                 method: 'GET',
                 headers: {
@@ -51,17 +61,44 @@ export default function BigPost(props) {
     }
 
     const renderComments = ({ item }) => {
+        let isAuthority2 = userIsAdmin || userIsMod;
         return (
-            <Comment text={item.text} username={item.username} createdAt={item.createdAt} />
+            <Comment 
+                text={item.text} 
+                username={item.username} 
+                createdAt={item.createdAt} 
+                isAuthority={isAuthority2} 
+                postId={item.postId}
+                id={item.id}
+                ip={ip}
+                jwt={jwt}
+            />
         )
     }
+
+    let isAuthority = userIsAdmin || userIsMod;
 
     return (
         <ImageBackground source={require("../components/Background.jpeg")} style={styles.backgroundImage}>
         <View style={styles.container}>
         <View style={styles.homePost}>
             <View style={styles.postDetails}>
-                <Text style={styles.title}>{props.title}</Text>
+                <View style={styles.postDetailsTop}>
+                    <Text style={styles.title}>
+                        {props.title}
+                    </Text>
+                    {isAuthority &&
+                        <TouchableOpacity onPress={() => {removePost(ip, jwt, props.id);}}>
+                            <Icon name="delete" style={styles.inputIcon}></Icon>
+                        </TouchableOpacity>
+                    }
+                </View>
+                <TouchableWithoutFeedback onPress={() => setSelectedUser(props.username)}>
+                    <Animated.View>
+                        <Text style={styles.username}><Icon name="user"/>{props.username}</Text>
+                    </Animated.View>
+                </TouchableWithoutFeedback>
+                
                 <Text style={styles.content}>{props.content}</Text>
             </View>
             {comments && 
@@ -78,10 +115,20 @@ export default function BigPost(props) {
                     style={styles.inputBox}
                     placeholder="Add a new comment"
                 />
-                <TouchableOpacity onPress={handleSubmit} style={styles.button}>
-                    <AntDesign name="right" style={styles.icon}></AntDesign>
+                <TouchableOpacity onPress={handleSubmit} style={styles.sendButton}>
+                    <AntDesign name="right" style={styles.inputIcon}></AntDesign>
                 </TouchableOpacity>
             </View>
+            {selectedUser &&
+                <Modal visible={true} animationType="slide">
+                    <View style={styles.topBar}>
+                        <TouchableOpacity onPress={() => setSelectedUser(null)}>
+                            <Icon name="left" style={styles.leftIcon} />
+                        </TouchableOpacity>
+                    </View>
+                    <User username={props.username} isAdmin={userIsAdmin} />
+                </Modal>
+            }
         </View>
         </View>
         </ImageBackground>
@@ -96,15 +143,28 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         marginTop: 30,
     },
+    topBar: {
+        paddingTop: 10,
+        marginBottom: 10,
+    },
     title:{
         fontSize: 35,
         textAlign: "center",
-        marginBottom: 15,
-        
+        marginBottom: 8,
+        marginRight: 25
     },
-
+    username:{
+        fontSize: 20,
+        textAlign: "center",
+        marginBottom: 15,
+    },
     postDetails:{
-        marginBottom: 10
+        marginBottom: 10,
+        alignItems: 'center'
+    },
+    postDetailsTop:{
+        flexDirection: 'row',
+        alignItems: 'center',
     },
     inputBox: {
         borderColor: '#4D5B9E',
@@ -114,15 +174,20 @@ const styles = StyleSheet.create({
         padding: 12,
         width: '85%'
     },
-    button: {
+    sendButton: {
         alignItems: 'center',
         justifyContent: 'center',
         borderColor: '#4D5B9E',
         borderWidth: 0.2,
         padding: 6
     },
-    icon: {
-        fontSize: 39
+    inputIcon: {
+        fontSize: 39,
+    },
+    leftIcon: {
+        fontSize: 30,
+        color: '#4D5B9E',
+        marginLeft: 15,
     },
     commentInput: {
         flexDirection: "row",
@@ -145,6 +210,11 @@ const styles = StyleSheet.create({
         borderTopWidth: 2,
         borderBottomWidth: 2,
         borderColor: 'black',
-
+        width: '100%'
+    },
+    buttonText: {
+        color: '#FFFFFF',
+        fontSize: 14,
+        fontWeight: 'bold',
     },
 })

@@ -26,7 +26,7 @@ export default function UserTabs(){
                   {
                     "display": "flex",
                     "padding": 5,
-                    "height": 80,
+                    "height": 55,
                   },
                   null
               ]
