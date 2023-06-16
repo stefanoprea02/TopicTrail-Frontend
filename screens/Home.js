@@ -35,6 +35,7 @@ export default function Home() {
   const [user, setUser] = React.useState(null);
   const [favorite, setFavorite] = React.useState(false);
   const [sortByTitleAscending, setSortByTitleAscending] = React.useState(true);
+  const [sortByDateAscending, setSortByDateAscending] = React.useState(true);
 
   function logout() {
     setJwt("");
@@ -95,17 +96,28 @@ export default function Home() {
 
   const handleSortByTitle = () => {
     setSortByTitleAscending(!sortByTitleAscending);
+    // Resetăm starea sortByDateAscending când se schimbă sortarea după titlu
+    setSortByDateAscending(true);
   };
+  const handleSortByDate = () => {
+    setSortByDateAscending(!sortByDateAscending);
+  };
+  
 
   const renderPost = ({ item }) => {
     return (
-      <TouchableWithoutFeedback onPress={() => setSelectedPost(item)}>
-        <Animated.View>
-          <HomePost title={item.title} content={item.content} />
-        </Animated.View>
-      </TouchableWithoutFeedback>
+        <TouchableWithoutFeedback onPress={() => setSelectedPost(item)}>
+            <Animated.View>
+                <HomePost
+                    title={item.title}
+                    content={item.content}
+                    postCreatedAt={item.postCreatedAt} // Adăugați această linie
+                />
+            </Animated.View>
+        </TouchableWithoutFeedback>
     );
-  };
+};
+
 
   const renderSearchResult = ({ item }) => {
     if (item.title) {
@@ -136,13 +148,21 @@ export default function Home() {
       );
     }
   }
-const sortedPosts = posts.sort((a, b) => {
+  const sortedPosts = posts.sort((a, b) => {
     if (sortByTitleAscending) {
       return a.title.localeCompare(b.title);
     } else {
       return b.title.localeCompare(a.title);
     }
+  }).sort((a, b) => {
+    // Sortăm postările după dată în funcție de starea sortByDateAscending
+    if (sortByDateAscending) {
+      return new Date(a.postCreatedAt) - new Date(b.postCreatedAt);
+    } else {
+      return new Date(b.postCreatedAt) - new Date(a.postCreatedAt);
+    }
   });
+  
   return (
     <ImageBackground source={require("../screens/Background.jpeg")} style={styles.backgroundImage}>
       <View style={styles.topBar}>
@@ -192,15 +212,24 @@ const sortedPosts = posts.sort((a, b) => {
       </Modal>
       }
       <View style={styles.sortBar}>
-        <TouchableOpacity onPress={handleSortByTitle} style={styles.sortButton}>
-          <Text style={{ marginRight: 5, fontSize:17, color:"#4D5B9E" }}>Sort by Title</Text>
-          <FontAwesome
-            name={sortByTitleAscending ? "caret-up" : "caret-down"}
-            size={18}
-            color="#4D5B9E"
-          />
-        </TouchableOpacity>
-      </View>
+  <TouchableOpacity onPress={handleSortByTitle} style={styles.sortButton}>
+    <Text style={{ marginRight: 5, fontSize: 17, color: "#4D5B9E", fontWeight: "bold", }}>Sort by Title</Text>
+    <FontAwesome
+      name={sortByTitleAscending ? "caret-up" : "caret-down"}
+      size={18}
+      color="#4D5B9E"
+    />
+  </TouchableOpacity>
+  <TouchableOpacity onPress={handleSortByDate} style={styles.sortButton}>
+    <Text style={{ marginRight: 5, fontSize: 17, color: "#4D5B9E", fontWeight: "bold", }}>Sort by Date</Text>
+    <FontAwesome
+      name={sortByDateAscending ? "caret-up" : "caret-down"}
+      size={18}
+      color="#4D5B9E"
+    />
+  </TouchableOpacity>
+</View>
+
       <FlatList
         data={sortedPosts}
         renderItem={renderPost}
@@ -310,6 +339,7 @@ const styles = StyleSheet.create({
       paddingHorizontal: 5,
       flexDirection: "row",
       alignItems: "center",
+ 
     },
 
     container: {
