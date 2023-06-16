@@ -21,6 +21,7 @@ import BigPost from "../components/BigPost";
 import Icon from "react-native-vector-icons/AntDesign";
 import { adFavorite, checkFavorite, getGroupsContainingText, getUsersContainingText, removeFavorite } from "../Functions";
 import FontAwesome from "react-native-vector-icons/FontAwesome"
+import { CommonActions, useNavigation } from '@react-navigation/native';
 
 export default function Home() {
   const { jwt, setJwt, ip } = React.useContext(JWTContext);
@@ -34,6 +35,7 @@ export default function Home() {
   const [group, setGroup] = React.useState(null);
   const [user, setUser] = React.useState(null);
   const [favorite, setFavorite] = React.useState(false);
+  const navigation = useNavigation();
 
   function logout() {
     setJwt("");
@@ -101,6 +103,18 @@ export default function Home() {
       </TouchableWithoutFeedback>
     );
   };
+
+  async function sendMessage(username){
+    setSelectedPost(null);
+    navigation.dispatch(
+        CommonActions.navigate({
+            name: 'Messages',
+            params: {
+            name: username,
+            },
+        })
+    );
+  }
 
   const renderSearchResult = ({ item }) => {
     if (item.title) {
@@ -216,6 +230,7 @@ export default function Home() {
             id={selectedPost.id} 
             username={selectedPost.username} 
             group={selectedPost.group}
+            sendMessage={sendMessage}
           />
         </Modal>
       }

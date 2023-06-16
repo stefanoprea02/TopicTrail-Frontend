@@ -161,3 +161,11 @@ export async function removeComment(ip, jwt, postId, id){
         }
     });
 }
+
+export function getTime(time){
+    return `${('0' + time[3]).slice(-2)}:${('0' + time[4]).slice(-2)}:${('0' + time[5]).slice(-2)}`;
+}
+
+export function getDate(time){
+    return `${('0' + time[0]).slice(-2)}.${('0' + time[1]).slice(-2)}.${('0' + time[2]).slice(-2)}`;
+}
