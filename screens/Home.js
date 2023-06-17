@@ -25,7 +25,7 @@ import { CommonActions, useNavigation } from '@react-navigation/native';
 
 export default function Home() {
   const { jwt, setJwt, ip } = React.useContext(JWTContext);
-  const [posts, setPosts] = React.useState();
+  const [posts, setPosts] = React.useState([]);
   const [selectedPost, setSelectedPost] = React.useState(null);
   const [searchText, setSearchText] = React.useState("");
   const [isRefreshing, setIsRefreshing] = React.useState(false);
@@ -35,6 +35,8 @@ export default function Home() {
   const [group, setGroup] = React.useState(null);
   const [user, setUser] = React.useState(null);
   const [favorite, setFavorite] = React.useState(false);
+  const [sortByTitleAscending, setSortByTitleAscending] = React.useState(true);
+  const [sortByDateAscending, setSortByDateAscending] = React.useState(true);
   const navigation = useNavigation();
 
   function logout() {
@@ -94,15 +96,30 @@ export default function Home() {
       setSearchResults([])
   }, [searchText]);
 
+  const handleSortByTitle = () => {
+    setSortByTitleAscending(!sortByTitleAscending);
+    // Resetăm starea sortByDateAscending când se schimbă sortarea după titlu
+    setSortByDateAscending(true);
+  };
+  const handleSortByDate = () => {
+    setSortByDateAscending(!sortByDateAscending);
+  };
+  
+
   const renderPost = ({ item }) => {
     return (
-      <TouchableWithoutFeedback onPress={() => setSelectedPost(item)}>
-        <Animated.View>
-          <HomePost title={item.title} content={item.content} />
-        </Animated.View>
-      </TouchableWithoutFeedback>
+        <TouchableWithoutFeedback onPress={() => setSelectedPost(item)}>
+            <Animated.View>
+                <HomePost
+                    title={item.title}
+                    content={item.content}
+                    postCreatedAt={item.postCreatedAt} // Adăugați această linie
+                />
+            </Animated.View>
+        </TouchableWithoutFeedback>
     );
-  };
+};
+
 
   async function sendMessage(username){
     setSelectedPost(null);
@@ -145,7 +162,21 @@ export default function Home() {
       );
     }
   }
-
+  const sortedPosts = posts.sort((a, b) => {
+    if (sortByTitleAscending) {
+      return a.title.localeCompare(b.title);
+    } else {
+      return b.title.localeCompare(a.title);
+    }
+  }).sort((a, b) => {
+    // Sortăm postările după dată în funcție de starea sortByDateAscending
+    if (sortByDateAscending) {
+      return new Date(a.postCreatedAt) - new Date(b.postCreatedAt);
+    } else {
+      return new Date(b.postCreatedAt) - new Date(a.postCreatedAt);
+    }
+  });
+  
   return (
     <ImageBackground source={require("../screens/Background.jpeg")} style={styles.backgroundImage}>
       <View style={styles.topBar}>
@@ -194,8 +225,27 @@ export default function Home() {
         </ImageBackground>
       </Modal>
       }
+      <View style={styles.sortBar}>
+  <TouchableOpacity onPress={handleSortByTitle} style={styles.sortButton}>
+    <Text style={{ marginRight: 5, fontSize: 17, color: "#4D5B9E", fontWeight: "bold", }}>Sort by Title</Text>
+    <FontAwesome
+      name={sortByTitleAscending ? "caret-up" : "caret-down"}
+      size={18}
+      color="#4D5B9E"
+    />
+  </TouchableOpacity>
+  <TouchableOpacity onPress={handleSortByDate} style={styles.sortButton}>
+    <Text style={{ marginRight: 5, fontSize: 17, color: "#4D5B9E", fontWeight: "bold", }}>Sort by Date</Text>
+    <FontAwesome
+      name={sortByDateAscending ? "caret-up" : "caret-down"}
+      size={18}
+      color="#4D5B9E"
+    />
+  </TouchableOpacity>
+</View>
+
       <FlatList
-        data={posts}
+        data={sortedPosts}
         renderItem={renderPost}
         keyExtractor={(item) => item.id}
         refreshControl={
@@ -285,11 +335,28 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       marginBottom: 10,
     },
+    
     groupDescription: {
       fontSize: 16,
       color: '#4D5B9E',
       textAlign: 'center',
     },
+    sortBar: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+      paddingHorizontal: 15,
+      marginBottom: 10,
+    },
+    sortButton: {
+      fontSize: 16,
+      color: "#4D5B9E",
+      paddingHorizontal: 5,
+      flexDirection: "row",
+      alignItems: "center",
+ 
+    },
+
     container: {
         flex: 1,
       },
@@ -313,5 +380,3 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
       },
   });
-  
-
