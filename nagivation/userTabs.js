@@ -7,6 +7,7 @@ import Feather from "react-native-vector-icons/Feather"
 import Home from "../screens/Home";
 import NewPost from "../screens/NewPost";
 import NewGroup from "../screens/NewGroup";
+import Messages from "../screens/Messages";
 const Tab = createBottomTabNavigator();
 
 export default function UserTabs(){
@@ -59,6 +60,16 @@ export default function UserTabs(){
                 tabBarLabel: "New Group",
                 tabBarIcon: ({ color }) => (
                   <AntDesign name="addusergroup" size={24} color={color} />
+                ),
+              }}
+            />
+            <Tab.Screen
+              name="Messages"
+              component={Messages}
+              options={{
+                tabBarLabel: "Messages",
+                tabBarIcon: ({ color }) => (
+                  <AntDesign name="message1" size={24} color={color} />
                 ),
               }}
             />

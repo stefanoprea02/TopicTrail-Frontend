@@ -19,15 +19,6 @@ export default function User(props){
     React.useEffect(() => {
         async function fetchData(){
             let u = await getUser(ip, jwt, props.username);
-            let p = await fetch(`${ip}/post/all?username=${props.username}`, {
-              method: 'GET',
-              headers: {
-                'Accept': 'application/json',
-                'Authorization': `Bearer ${jwt}`,
-              }
-            })
-              .then((response) => response.json())
-              .then((data) => data)
             setUser(u);
             
             let modG = [];
@@ -107,6 +98,9 @@ export default function User(props){
                         </TouchableOpacity>
                     </View>
                 }
+                <TouchableOpacity style={styles.button} onPress={() => props.sendMessage(props.username)}>
+                    <Text style={styles.buttonText}>Send message</Text>
+                </TouchableOpacity>
             </View>
             </ImageBackground>
         )

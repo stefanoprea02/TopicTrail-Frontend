@@ -76,6 +76,11 @@ export default function BigPost(props) {
         )
     }
 
+    async function sendMessageBigPost(message){
+        setSelectedUser(null);
+        props.sendMessage(message);
+    }
+
     let isAuthority = userIsAdmin || userIsMod;
 
     return (
@@ -126,7 +131,7 @@ export default function BigPost(props) {
                             <Icon name="left" style={styles.leftIcon} />
                         </TouchableOpacity>
                     </View>
-                    <User username={props.username} isAdmin={userIsAdmin} />
+                    <User username={props.username} isAdmin={userIsAdmin} sendMessage={sendMessageBigPost} />
                 </Modal>
             }
         </View>

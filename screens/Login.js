@@ -7,8 +7,8 @@ import { JWTContext } from "../Context";
 export default function Login(){
     const {setJwt, ip} = React.useContext(JWTContext);
     const [formData, setFormData] = React.useState({
-        username: "stefan",
-        password: "stefan"
+        username: "Stefan",
+        password: "Stefan"
     });
     const [errors, setErrors] = React.useState({
         username: [],
@@ -22,6 +22,7 @@ export default function Login(){
     }
 
     function handleSubmit(){
+        console.log("DA");
         const data = new FormData();
         data.append("username", formData.username);
         data.append("password", formData.password);
