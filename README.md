@@ -70,14 +70,15 @@ profil public editabil
 ![Imagine WhatsApp 2023-06-17 la 21 02 15](https://github.com/stefanoprea02/TopicTrail-Frontend/assets/93120712/376ef6c2-c49f-4efb-9109-ded1da24bccd)
 
 # 📽️ Live demo pentru aplicație
-Demo-ul pentru aplicație se poate găsi la acest link: (ADAUGA LINK UL) 
+Demo-ul pentru aplicație se poate găsi la acest link: 
+[de adaugat](..)
 
 # 👥 Echipa care a realizat proiectul
-Oprea Mihai Stefan
-Monete Andreea Maria
-Flutur Angelica Costela
-Oprea Tudor 
+Oprea Mihai Stefan, 
+Monete Andreea Maria, 
+Flutur Angelica Costela, 
+Oprea Tudor .
 
 
 
-< 📆 Proiect finalizat in iunie 2023 >
+ 📆 Proiect finalizat in iunie 2023 
