@@ -39,7 +39,7 @@ export default function Messages(){
             eventSource = new EventSource(eventSourceUrl, { headers: { Authorization: `Bearer ${jwt}` } })
 
             eventSource.addEventListener('message', event => {
-                if (event.data !== undefined) {
+                                if (event.data !== undefined) {
                 let data = JSON.parse(event.data);
             
                 if (!receivedMessagesRef.current.has(data.id)) {
@@ -131,8 +131,8 @@ export default function Messages(){
                     );
                 }
             }
-            if (sender === currentConv) {
-                return (
+                        if (sender === currentConv) {
+                                return (
                     <Modal key={`${sender}m`} visible={true} animationType="slide">
                         <View style={styles.topBar}>
                             <TouchableOpacity onPress={() => setCurrentConv(null)}>
@@ -168,6 +168,32 @@ export default function Messages(){
                 );
             }
         });
+    }else{
+        if(currentConv){
+            return (
+                <Modal key={`m`} visible={true} animationType="slide">
+                    <View style={styles.topBar}>
+                        <TouchableOpacity onPress={() => {setCurrentConv(null); console.log("DA")}}>
+                            <Icon name="left" style={styles.leftIcon} />
+                        </TouchableOpacity>
+                    </View>
+                    
+                    <View style={styles.messageView}>
+                        <View style={styles.messageInput}>
+                            <TextInput
+                                value={formData}
+                                onChangeText={(text) => setFormData(text)}
+                                style={styles.inputBox}
+                                placeholder="Send a message"
+                            />
+                            <TouchableOpacity onPress={handleSubmit} style={styles.sendButton}>
+                                <AntDesign name="right" style={styles.inputIcon}></AntDesign>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </Modal>
+            );
+        }
     }
 
 
