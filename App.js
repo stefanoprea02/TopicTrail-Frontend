@@ -1,7 +1,7 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import Root from './nagivation/root';
-import { JWTProvider } from './Context';
+import { StatusBar } from "expo-status-bar";
+import { StyleSheet, Text, View } from "react-native";
+import Root from "./nagivation/root";
+import { JWTProvider } from "./Context";
 
 export default function App() {
   return (
@@ -17,6 +17,6 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 11,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
   },
 });
