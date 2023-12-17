@@ -1,6 +1,6 @@
 import React from "react";
-import { ImageBackground, TouchableOpacity, Text } from "react-native";
-import { View, TextInput, Button, StyleSheet, navigation } from "react-native";
+import { Text } from "react-native";
+import { View, StyleSheet } from "react-native";
 
 export default function HomePost(props) {
   return (
@@ -33,7 +33,6 @@ const styles = StyleSheet.create({
     fontSize: 25,
     textAlign: "center",
     marginTop: 20,
-    marginBottom: 10,
     color: "#4D5B9E",
     fontWeight: "bold",
   },

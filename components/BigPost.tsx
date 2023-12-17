@@ -9,23 +9,25 @@ import {
   ImageBackground,
   TouchableWithoutFeedback,
   Animated,
-  Modal,
 } from "react-native";
 import { JWTContext } from "../Context";
 import Comment from "./Comment";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import Icon from "react-native-vector-icons/AntDesign";
-import User from "./User";
 import { isAdmin, isModerator, removePost } from "../Functions";
 
-export default function BigPost(props) {
+interface BigPostProps {
+  goToProfile: (username: string) => void;
+  post: Post;
+}
+
+export default function BigPost(props: BigPostProps) {
   const { ip, jwt } = React.useContext(JWTContext);
   const [formData, setFormData] = React.useState({
     content: "",
   });
   const [comments, setComments] = React.useState(null);
   const [aux, setAux] = React.useState(false);
-  const [selectedUser, setSelectedUser] = React.useState(null);
   const [userIsAdmin, setIsAdmin] = React.useState(false);
   const [userIsMod, setIsMod] = React.useState(false);
 
@@ -33,46 +35,49 @@ export default function BigPost(props) {
     setFormData({ ...formData, [field]: text });
   }
 
+  const fetchComms = async () => {
+    let comments = await fetch(`${ip}/post/${props.post.id}/comment`, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${jwt}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => data);
+    setComments(comments);
+  };
+
   React.useEffect(() => {
     async function fetchData() {
       let a = await isAdmin(ip, jwt);
       setIsAdmin(a);
-      let m = await isModerator(ip, jwt, props.group);
+      let m = await isModerator(ip, jwt, props.post.group);
       setIsMod(m);
-      let comments = await fetch(`${ip}/post/${props.id}/comment`, {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-          Authorization: `Bearer ${jwt}`,
-        },
-      })
-        .then((response) => response.json())
-        .then((data) => data);
-      setComments(comments);
+
+      await fetchComms();
     }
     fetchData();
   }, [aux]);
 
-  function handleSubmit() {
+  async function handleSubmit() {
     const data = new FormData();
     data.append("text", formData.content);
-    fetch(`${ip}/post/${props.id}/comment/new`, {
+    await fetch(`${ip}/post/${props.post.id}/comment/new`, {
       method: "POST",
       headers: {
         Accept: "application/json",
         Authorization: `Bearer ${jwt}`,
       },
       body: data,
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        setFormData({ ...formData, ["content"]: "" });
-        setAux(!aux);
-      });
+    });
+    setFormData({ ...formData, ["content"]: "" });
+    await fetchComms();
   }
 
   const renderComments = ({ item }) => {
     let isAuthority2 = userIsAdmin || userIsMod;
+
     return (
       <Comment
         text={item.text}
@@ -83,31 +88,27 @@ export default function BigPost(props) {
         id={item.id}
         ip={ip}
         jwt={jwt}
+        fetchComms={fetchComms}
       />
     );
   };
-
-  async function sendMessageBigPost(message) {
-    setSelectedUser(null);
-    props.sendMessage(message);
-  }
 
   let isAuthority = userIsAdmin || userIsMod;
 
   return (
     <ImageBackground
-      source={require("../components/Background.jpeg")}
+      source={require("../assets/Background.jpeg")}
       style={styles.backgroundImage}
     >
       <View style={styles.container}>
         <View style={styles.homePost}>
           <View style={styles.postDetails}>
             <View style={styles.postDetailsTop}>
-              <Text style={styles.title}>{props.title}</Text>
+              <Text style={styles.title}>{props.post.title}</Text>
               {isAuthority && (
                 <TouchableOpacity
                   onPress={() => {
-                    removePost(ip, jwt, props.id);
+                    removePost(ip, jwt, props.post.id);
                   }}
                 >
                   <Icon name="delete" style={styles.inputIcon}></Icon>
@@ -115,17 +116,17 @@ export default function BigPost(props) {
               )}
             </View>
             <TouchableWithoutFeedback
-              onPress={() => setSelectedUser(props.username)}
+              onPress={() => props.goToProfile(props.post.username)}
             >
               <Animated.View>
                 <Text style={styles.username}>
                   <Icon name="user" />
-                  {props.username}
+                  {props.post.username}
                 </Text>
               </Animated.View>
             </TouchableWithoutFeedback>
 
-            <Text style={styles.content}>{props.content}</Text>
+            <Text style={styles.content}>{props.post.content}</Text>
           </View>
           {comments && (
             <FlatList
@@ -145,20 +146,6 @@ export default function BigPost(props) {
               <AntDesign name="right" style={styles.inputIcon}></AntDesign>
             </TouchableOpacity>
           </View>
-          {selectedUser && (
-            <Modal visible={true} animationType="slide">
-              <View style={styles.topBar}>
-                <TouchableOpacity onPress={() => setSelectedUser(null)}>
-                  <Icon name="left" style={styles.leftIcon} />
-                </TouchableOpacity>
-              </View>
-              <User
-                username={props.username}
-                isAdmin={userIsAdmin}
-                sendMessage={sendMessageBigPost}
-              />
-            </Modal>
-          )}
         </View>
       </View>
     </ImageBackground>

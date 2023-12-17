@@ -116,7 +116,7 @@ export default function NewGroup() {
 
   return (
     <ImageBackground
-      source={require("../screens/Background.jpeg")}
+      source={require("../assets/Background.jpeg")}
       style={styles.backgroundImage}
     >
       <View style={styles.container}>
@@ -134,12 +134,7 @@ export default function NewGroup() {
           multiline={true}
         />
         {error && <InputError errors={error} />}
-        {/* <Button onPress={() => handleSubmit()} title="Add Group" style={styles.button} /> */}
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => handleSubmit()}
-          title="Add Group"
-        >
+        <TouchableOpacity style={styles.button} onPress={() => handleSubmit()}>
           <Text style={styles.buttonText}>Add Group</Text>
         </TouchableOpacity>
         {userIsAdmin && (

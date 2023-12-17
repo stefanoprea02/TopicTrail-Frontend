@@ -71,7 +71,7 @@ export default function Register() {
 
   return (
     <ImageBackground
-      source={require("../screens/Background.jpeg")}
+      source={require("../assets/Background.jpeg")}
       style={styles.backgroundImage}
     >
       <View style={styles.container}>
@@ -98,12 +98,7 @@ export default function Register() {
           autoCapitalize="none"
         />
         {error && <InputError errors={error} />}
-        {/* <Button onPress={handleSubmit} title="Register" /> */}
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => handleSubmit()}
-          title="Register"
-        >
+        <TouchableOpacity style={styles.button} onPress={() => handleSubmit()}>
           <Text style={styles.buttonText}>Register</Text>
         </TouchableOpacity>
       </View>

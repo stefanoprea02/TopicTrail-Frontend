@@ -14,8 +14,10 @@
     "@react-navigation/bottom-tabs": "^6.5.7",
     "@react-navigation/native": "^6.1.6",
     "@react-navigation/stack": "^6.3.16",
+    "@types/react-native": "^0.72.8",
     "expo": "~48.0.11",
     "expo-constants": "^14.2.1",
+    "expo-image-picker": "^14.5.0",
     "expo-secure-store": "~12.1.1",
     "expo-status-bar": "~1.4.4",
     "js-cookie": "^3.0.1",
@@ -26,10 +28,14 @@
     "react-native-element-dropdown": "^2.8.1",
     "react-native-event-source": "^1.1.0",
     "react-native-vector-icons": "^9.2.0",
-    "react-native-web": "~0.18.10"
+    "react-native-web": "~0.18.10",
+    "typescript": "^4.9.4"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
+  },
+  "resolutions": {
+    "@types/react": "17.0.43"
   },
   "private": true
 }

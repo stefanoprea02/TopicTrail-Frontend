@@ -1,59 +1,49 @@
 import React from "react";
 import { ImageBackground, TouchableOpacity } from "react-native";
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableWithoutFeedback,
-  Animated,
-  StyleSheet,
-  Button,
-} from "react-native";
-import { save, getValueFor } from "../Storage";
+import { View, Text, TextInput, StyleSheet } from "react-native";
+import { save } from "../Storage";
 import { JWTContext } from "../Context";
 
 export default function Login() {
   const { setJwt, ip } = React.useContext(JWTContext);
   const [formData, setFormData] = React.useState({
-    username: "Stefan",
-    password: "Stefan",
+    username: "admin",
+    password: "admin",
   });
-  const [errors, setErrors] = React.useState({
-    username: [],
-    email: [],
-    password: [],
-  });
-  const [submited, setSubmited] = React.useState(false);
 
-  function handleChange(field, text) {
+  function handleChange(field: string, text: string) {
     setFormData({ ...formData, [field]: text });
   }
 
   function handleSubmit() {
-    console.log("DA");
     const data = new FormData();
     data.append("username", formData.username);
     data.append("password", formData.password);
-    fetch(`${ip}/api/auth/login`, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-      },
-      body: data,
-    })
-      .then((response) => response.text())
-      .then((data) => {
-        console.log(data);
-        setJwt(data);
-        save(data);
-      });
 
-    setSubmited(true);
+    try {
+      fetch(`${ip}/api/auth/login`, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+        },
+        body: data,
+      })
+        .then((response) => {
+          console.log(response);
+          return response.text();
+        })
+        .then((data) => {
+          setJwt(data);
+          save(data, formData.username);
+        });
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   return (
     <ImageBackground
-      source={require("../screens/Background.jpeg")}
+      source={require("../assets/Background.jpeg")}
       style={styles.backgroundImage}
     >
       <View style={styles.container}>
@@ -72,12 +62,7 @@ export default function Login() {
           secureTextEntry={true}
           autoCapitalize="none"
         />
-        {/* <Button onPress={handleSubmit} title="Login" /> */}
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => handleSubmit()}
-          title="Login"
-        >
+        <TouchableOpacity style={styles.button} onPress={() => handleSubmit()}>
           <Text style={styles.buttonText}>Login</Text>
         </TouchableOpacity>
       </View>
@@ -102,12 +87,6 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     fontSize: 18,
     padding: 12,
-  },
-  backgroundImage: {
-    flex: 1,
-    resizeMode: "cover",
-    width: "100%",
-    height: "100%",
   },
   button: {
     backgroundColor: "#4D5B9E",

@@ -25,7 +25,9 @@ export default function NewPost() {
   const [groups, setGroups] = React.useState(null);
   const [error, setErrors] = React.useState(null);
 
-  function handleChange(field, text) {
+  function handleChange(field: string, text: string) {
+    console.log(field);
+    console.log(text);
     setFormData({ ...formData, [field]: text });
   }
 
@@ -35,6 +37,7 @@ export default function NewPost() {
     data.append("content", formData.content);
     data.append("group", formData.group);
     data.append("id", formData.id);
+    console.log(formData);
     fetch(`${ip}/post/new`, {
       method: "POST",
       headers: {
@@ -87,7 +90,7 @@ export default function NewPost() {
 
   return (
     <ImageBackground
-      source={require("../screens/Background.jpeg")}
+      source={require("../assets/Background.jpeg")}
       style={styles.backgroundImage}
     >
       <View style={styles.container}>
@@ -106,7 +109,6 @@ export default function NewPost() {
         />
         {groups && (
           <Dropdown
-            selectedValue={formData.group}
             style={styles.dropdown}
             onChange={(text) => handleChange("group", text.value)}
             data={groups}
@@ -118,12 +120,7 @@ export default function NewPost() {
         )}
       </View>
       {error && <InputError errors={error} />}
-      {/* <Button onPress={() => handleSubmit()} title="Add Post" /> */}
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => handleSubmit()}
-        title="Add Group"
-      >
+      <TouchableOpacity style={styles.button} onPress={() => handleSubmit()}>
         <Text style={styles.buttonText}>Add Post</Text>
       </TouchableOpacity>
     </ImageBackground>

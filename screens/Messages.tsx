@@ -22,15 +22,17 @@ export default function Messages() {
   const { jwt, setJwt, ip } = React.useContext(JWTContext);
   const [formData, setFormData] = React.useState("");
   const [listening, setListening] = React.useState(false);
-  const [messageData, setMessageData] = React.useState({});
-  const [userData, setUserData] = React.useState(new Set());
-  const [currentConv, setCurrentConv] = React.useState();
+  const [messageData, setMessageData] = React.useState<{
+    [key: string]: Message[];
+  }>({});
+  const [userData, setUserData] = React.useState<Set<string>>(new Set());
+  const [currentConv, setCurrentConv] = React.useState<string>();
   const route = useRoute();
   const [conversation, setConversation] = React.useState(route.params?.name);
   const receivedMessagesRef = React.useRef(new Set());
   let eventSource = null;
 
-  function changeConv(conv) {
+  function changeConv(conv: string) {
     if (messageData[conv] !== undefined) {
     }
     if (currentConv != conv) setCurrentConv(conv);
@@ -43,7 +45,7 @@ export default function Messages() {
 
     if (!listening && eventSource == undefined) {
       setListening(true);
-      const eventSourceUrl = `${ip}/messages/${jwtDecode(jwt).sub}`;
+      const eventSourceUrl = `${ip}/messages/${(jwtDecode(jwt) as any).sub}`;
       eventSource = new EventSource(eventSourceUrl, {
         headers: { Authorization: `Bearer ${jwt}` },
       });
@@ -55,7 +57,7 @@ export default function Messages() {
           if (!receivedMessagesRef.current.has(data.id)) {
             receivedMessagesRef.current.add(data.id); // Update the receivedMessages set
 
-            if (data.sender !== jwtDecode(jwt).sub) {
+            if (data.sender !== (jwtDecode(jwt) as any).sub) {
               setUserData(
                 (prevUserData) => new Set([...prevUserData, data.sender])
               );
@@ -66,7 +68,7 @@ export default function Messages() {
             }
 
             setMessageData((old) => {
-              if (data.sender === jwtDecode(jwt).sub) {
+              if (data.sender === (jwtDecode(jwt) as any).sub) {
                 if (old[data.receiver] !== undefined) {
                   return {
                     ...old,
@@ -112,7 +114,7 @@ export default function Messages() {
     data.append("id", "");
     data.append("content", formData);
     data.append("receiver", currentConv);
-    data.append("sender", jwtDecode(jwt).sub);
+    data.append("sender", (jwtDecode(jwt) as any).sub);
     setFormData("");
     const response = await fetch(`${ip}/messages`, {
       method: "POST",
@@ -129,7 +131,7 @@ export default function Messages() {
     messages = Object.keys(messageData).map((sender) => {
       let messagesBySender = [];
       for (let i = 0; i < messageData[sender].length; i++) {
-        if (messageData[sender][i].sender === jwtDecode(jwt).sub) {
+        if (messageData[sender][i].sender === (jwtDecode(jwt) as any).sub) {
           messagesBySender.push(
             <View key={messageData[sender][i].id} style={styles.messageSent}>
               <Text style={styles.messageText}>
@@ -265,7 +267,7 @@ export default function Messages() {
 
   return (
     <ImageBackground
-      source={require("../components/Background.jpeg")}
+      source={require("../assets/Background.jpeg")}
       style={styles.backgroundImage}
     >
       <View>

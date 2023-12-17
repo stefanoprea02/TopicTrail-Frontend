@@ -1,4 +1,4 @@
-export async function adFavorite(ip, jwt, id) {
+export async function adFavorite(ip: string, jwt: string, id: string) {
   return await fetch(`${ip}/post/adFavorite/${id}`, {
     method: "GET",
     headers: {
@@ -8,7 +8,7 @@ export async function adFavorite(ip, jwt, id) {
   });
 }
 
-export async function removeFavorite(ip, jwt, id) {
+export async function removeFavorite(ip: string, jwt: string, id: string) {
   return await fetch(`${ip}/post/removeFavorite/${id}`, {
     method: "GET",
     headers: {
@@ -18,7 +18,7 @@ export async function removeFavorite(ip, jwt, id) {
   });
 }
 
-export async function checkFavorite(ip, jwt, id) {
+export async function checkFavorite(ip: string, jwt: string, id: string) {
   return await fetch(`${ip}/post/checkFavorite/${id}`, {
     method: "GET",
     headers: {
@@ -30,7 +30,11 @@ export async function checkFavorite(ip, jwt, id) {
     .then((data) => data);
 }
 
-export async function getUser(ip, jwt, username) {
+export async function getUser(
+  ip: string,
+  jwt: string,
+  username: string
+): Promise<User> {
   return await fetch(`${ip}/user/${username}`, {
     method: "GET",
     headers: {
@@ -42,7 +46,11 @@ export async function getUser(ip, jwt, username) {
     .then((data) => data);
 }
 
-export async function getUsersContainingText(ip, jwt, searchText) {
+export async function getUsersContainingText(
+  ip: string,
+  jwt: string,
+  searchText: string
+): Promise<User[]> {
   return await fetch(`${ip}/users/${searchText}`, {
     method: "GET",
     headers: {
@@ -54,7 +62,11 @@ export async function getUsersContainingText(ip, jwt, searchText) {
     .then((data) => data);
 }
 
-export async function getGroupsContainingText(ip, jwt, searchText) {
+export async function getGroupsContainingText(
+  ip: string,
+  jwt: string,
+  searchText: string
+): Promise<Group[]> {
   return await fetch(`${ip}/group/all?groupTitle=${searchText}`, {
     method: "GET",
     headers: {
@@ -66,7 +78,7 @@ export async function getGroupsContainingText(ip, jwt, searchText) {
     .then((data) => data);
 }
 
-export async function getUnapprovedGroups(ip, jwt) {
+export async function getUnapprovedGroups(ip: string, jwt: string) {
   return await fetch(`${ip}/group/allnotapproved`, {
     method: "GET",
     headers: {
@@ -78,7 +90,7 @@ export async function getUnapprovedGroups(ip, jwt) {
     .then((data) => data);
 }
 
-export async function approveGroup(ip, jwt, title) {
+export async function approveGroup(ip: string, jwt: string, title: string) {
   return await fetch(`${ip}/group/approve/${title}`, {
     method: "GET",
     headers: {
@@ -88,7 +100,7 @@ export async function approveGroup(ip, jwt, title) {
   });
 }
 
-export async function disapproveGroup(ip, jwt, id) {
+export async function disapproveGroup(ip: string, jwt: string, id: string) {
   return await fetch(`${ip}/group/disapprove/${id}`, {
     method: "GET",
     headers: {
@@ -98,7 +110,7 @@ export async function disapproveGroup(ip, jwt, id) {
   });
 }
 
-export async function isAdmin(ip, jwt) {
+export async function isAdmin(ip: string, jwt: string) {
   return await fetch(`${ip}/user/isAdmin`, {
     method: "GET",
     headers: {
@@ -110,7 +122,7 @@ export async function isAdmin(ip, jwt) {
     .then((data) => data);
 }
 
-export async function isModerator(ip, jwt, group) {
+export async function isModerator(ip: string, jwt: string, group: string) {
   return await fetch(`${ip}/user/isModerating/${group}`, {
     method: "GET",
     headers: {
@@ -122,7 +134,12 @@ export async function isModerator(ip, jwt, group) {
     .then((data) => data);
 }
 
-export async function addModerator(ip, jwt, username, group) {
+export async function addModerator(
+  ip: string,
+  jwt: string,
+  username: string,
+  group: string
+) {
   return await fetch(`${ip}/user/addModerating/${username}/${group}`, {
     method: "GET",
     headers: {
@@ -132,7 +149,12 @@ export async function addModerator(ip, jwt, username, group) {
   });
 }
 
-export async function removeModerator(ip, jwt, username, group) {
+export async function removeModerator(
+  ip: string,
+  jwt: string,
+  username: string,
+  group: string
+) {
   return await fetch(`${ip}/user/removeModerating/${username}/${group}`, {
     method: "GET",
     headers: {

@@ -21,9 +21,10 @@ export default function Comment(props) {
         <Text style={styles.comText}>{props.text}</Text>
         {props.isAuthority && (
           <TouchableOpacity
-            onPress={() =>
-              removeComment(props.ip, props.jwt, props.postId, props.id)
-            }
+            onPress={async () => {
+              await removeComment(props.ip, props.jwt, props.postId, props.id);
+              await props.fetchComms();
+            }}
           >
             <Icon name="delete" style={styles.icon}></Icon>
           </TouchableOpacity>
