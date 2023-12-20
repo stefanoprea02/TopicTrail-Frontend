@@ -14,14 +14,22 @@ export default function HomePost(props) {
       </View>
       <Text style={styles.content}>{props.content}</Text>
     </View>
+    
   );
 }
 
 const styles = StyleSheet.create({
   homePost: {
-    padding: 15,
-    borderBottomWidth: 1,
-    borderBottomColor: "grey",
+    backgroundColor: "#FFFFFF",
+    borderRadius: 10,
+    padding: 20,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+    elevation: 3,
+    marginVertical: 8,
+    marginHorizontal: 10,
   },
   header: {
     flexDirection: "row",
@@ -30,18 +38,18 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   title: {
-    fontSize: 25,
-    textAlign: "center",
-    marginTop: 20,
-    color: "#4D5B9E",
+    fontSize: 22,
     fontWeight: "bold",
+    color: "#367CFE",
   },
   content: {
-    color: "black",
     fontSize: 18,
+    color: "#666666",
+    marginTop: 10,
   },
   postCreatedAt: {
-    color: "gray",
-    fontWeight: "bold",
+    fontSize: 16,
+    color: "#808080",
+    fontStyle: "italic",
   },
 });

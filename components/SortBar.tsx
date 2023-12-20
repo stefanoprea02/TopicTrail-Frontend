@@ -19,7 +19,7 @@ export default function SortBar(props: SortBarProps) {
           style={{
             marginRight: 5,
             fontSize: 17,
-            color: "#4D5B9E",
+            color: "#FFFFFF",
             fontWeight: "bold",
           }}
         >
@@ -28,7 +28,7 @@ export default function SortBar(props: SortBarProps) {
         <FontAwesome
           name={props.sortByTitleAscending ? "caret-up" : "caret-down"}
           size={18}
-          color="#4D5B9E"
+          color="#FFFFFF"
         />
       </TouchableOpacity>
       <TouchableOpacity
@@ -39,7 +39,7 @@ export default function SortBar(props: SortBarProps) {
           style={{
             marginRight: 5,
             fontSize: 17,
-            color: "#4D5B9E",
+            color: "#FFFFFF",
             fontWeight: "bold",
           }}
         >
@@ -48,7 +48,7 @@ export default function SortBar(props: SortBarProps) {
         <FontAwesome
           name={props.sortByDateAscending ? "caret-up" : "caret-down"}
           size={18}
-          color="#4D5B9E"
+          color="#FFFFFF"
         />
       </TouchableOpacity>
     </View>
@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
   },
   sortButton: {
     fontSize: 16,
-    color: "#4D5B9E",
+    color: "#FFFFFF",
     paddingHorizontal: 5,
     flexDirection: "row",
     alignItems: "center",
