@@ -12,19 +12,17 @@ export default function AuthenticationTabs() {
     <NavigationContainer>
       <Tab.Navigator
         screenOptions={{
-          headerShown: true,
+          headerShown: false,
           tabBarActiveTintColor: "#293264",
           tabBarInactiveTintColor: "gray",
           tabBarLabelStyle: {
-            fontSize: 14,
-            fontWeight: "bold",
-            marginBottom: 4,
+            fontWeight: "700",
+            fontSize: 12,
           },
           tabBarStyle: [
             {
               display: "flex",
-              padding: 5,
-              height: 80,
+              height: 55,
             },
             null,
           ],

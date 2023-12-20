@@ -17,7 +17,8 @@ import {
   getUnapprovedGroups,
   isAdmin,
 } from "../Functions";
-import Icon from "react-native-vector-icons/AntDesign";
+import { AntDesign } from "react-native-vector-icons";
+import ActionButton from "../components/ActionButton";
 
 export default function NewGroup() {
   const navigation = useNavigation();
@@ -100,7 +101,7 @@ export default function NewGroup() {
             setR(!r);
           }}
         >
-          <Icon name="check" style={styles.Icon}></Icon>
+          <AntDesign name="check" style={styles.icon}></AntDesign>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
@@ -108,7 +109,7 @@ export default function NewGroup() {
             setR(!r);
           }}
         >
-          <Icon name="close" style={styles.Icon}></Icon>
+          <AntDesign name="close" style={styles.icon}></AntDesign>
         </TouchableOpacity>
       </View>
     );
@@ -120,25 +121,26 @@ export default function NewGroup() {
       style={styles.backgroundImage}
     >
       <View style={styles.container}>
-        <TextInput
-          value={formData.title}
-          onChangeText={(text) => handleChange("title", text)}
-          style={styles.inputBox1}
-          placeholder="Group Name"
-        />
-        <TextInput
-          value={formData.description}
-          onChangeText={(text) => handleChange("description", text)}
-          style={styles.inputBox2}
-          placeholder="Description"
-          multiline={true}
-        />
-        {error && <InputError errors={error} />}
-        <TouchableOpacity style={styles.button} onPress={() => handleSubmit()}>
-          <Text style={styles.buttonText}>Add Group</Text>
-        </TouchableOpacity>
+        <View style={styles.inputContainer}>
+          <TextInput
+            value={formData.title}
+            onChangeText={(text) => handleChange("title", text)}
+            style={styles.inputBox}
+            placeholder="Group Name"
+          />
+          <TextInput
+            value={formData.description}
+            onChangeText={(text) => handleChange("description", text)}
+            style={styles.inputBoxMultiline}
+            placeholder="Description"
+            multiline={true}
+          />
+          {error && <InputError errors={error} />}
+        </View>
+        <ActionButton actionName="Create group" onSubmit={handleSubmit} />
         {userIsAdmin && (
           <FlatList
+            style={styles.groupList}
             data={unapprovedGroups}
             renderItem={renderUnapprovedGroups}
             keyExtractor={(item) => item.id}
@@ -150,67 +152,55 @@ export default function NewGroup() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "space-around",
-  },
-  inputBox1: {
-    borderColor: "#4D5B9E",
-    borderWidth: 0.5,
-    marginVertical: 5,
-    fontSize: 25,
-    padding: 30,
-    marginLeft: 20,
-    marginRight: 20,
-    backgroundColor: "#F0FFFF",
-    textAlignVertical: "top",
-    textAlign: "center",
-  },
-  inputBox2: {
-    borderColor: "#4D5B9E",
-    borderWidth: 0.5,
-    marginVertical: 5,
-    fontSize: 18,
-    padding: 60,
-    marginLeft: 20,
-    marginRight: 20,
-    backgroundColor: "#F0FFFF",
-    textAlignVertical: "top",
-    maxHeight: 300,
-  },
   backgroundImage: {
     flex: 1,
     resizeMode: "cover",
     width: "100%",
-    height: "100%",
+    height: "110%",
   },
-  button: {
-    backgroundColor: "#4D5B9E",
-    borderRadius: 5,
-    paddingVertical: 12,
-    marginTop: 20,
+  container: {
+    flex: 1,
+    marginTop: "30%",
     alignItems: "center",
-    marginLeft: 35,
-    marginRight: 35,
-    marginBottom: 10,
+    paddingBottom: 30,
   },
-  buttonText: {
-    color: "#FFFFFF",
+  inputContainer: {
+    width: "90%",
+    gap: 20,
+    marginBottom: 60,
+  },
+  inputBox: {
+    backgroundColor: "white",
+    borderRadius: 20,
     fontSize: 18,
-    fontWeight: "bold",
+    paddingVertical: 19,
+    paddingHorizontal: 30,
+  },
+  inputBoxMultiline: {
+    backgroundColor: "white",
+    borderRadius: 20,
+    fontSize: 18,
+    paddingVertical: 19,
+    paddingHorizontal: 30,
+    height: 200,
+    textAlignVertical: "top",
   },
   group: {
     flexDirection: "row",
     margin: 5,
     justifyContent: "center",
     alignItems: "center",
+    gap: 20,
+  },
+  icon: {
+    fontSize: 40,
+    color: "#367CFE",
   },
   title: {
     fontSize: 20,
     paddingHorizontal: 10,
   },
-  Icon: {
-    fontSize: 40,
-    color: "#4D5B9E",
+  groupList: {
+    marginTop: 20,
   },
 });

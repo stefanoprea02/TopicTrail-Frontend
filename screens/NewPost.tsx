@@ -12,6 +12,7 @@ import { useNavigation, CommonActions } from "@react-navigation/native";
 import { Dropdown } from "react-native-element-dropdown";
 import { getGroupsContainingText } from "../Functions";
 import InputError from "../components/InputError";
+import ActionButton from "../components/ActionButton";
 
 export default function NewPost() {
   const navigation = useNavigation();
@@ -26,8 +27,6 @@ export default function NewPost() {
   const [error, setErrors] = React.useState(null);
 
   function handleChange(field: string, text: string) {
-    console.log(field);
-    console.log(text);
     setFormData({ ...formData, [field]: text });
   }
 
@@ -94,105 +93,77 @@ export default function NewPost() {
       style={styles.backgroundImage}
     >
       <View style={styles.container}>
-        <TextInput
-          value={formData.title}
-          onChangeText={(text) => handleChange("title", text)}
-          style={styles.inputBox1}
-          placeholder="Title"
-        />
-        <TextInput
-          value={formData.content}
-          onChangeText={(text) => handleChange("content", text)}
-          style={[styles.inputBox2, { height: 150 }]}
-          placeholder="Content"
-          multiline={true}
-        />
-        {groups && (
-          <Dropdown
-            style={styles.dropdown}
-            onChange={(text) => handleChange("group", text.value)}
-            data={groups}
-            labelField="label"
-            valueField="value"
-            maxHeight={300}
-            value={formData.group}
+        <View style={styles.inputContainer}>
+          <TextInput
+            value={formData.title}
+            onChangeText={(text) => handleChange("title", text)}
+            style={styles.inputBox}
+            placeholder="Title"
           />
-        )}
+          <TextInput
+            value={formData.content}
+            onChangeText={(text) => handleChange("content", text)}
+            style={[styles.inputBoxMultiline, { height: 150 }]}
+            placeholder="Content"
+            multiline={true}
+          />
+          {groups && (
+            <Dropdown
+              style={styles.dropdown}
+              onChange={(text) => handleChange("group", text.value)}
+              data={groups}
+              labelField="label"
+              valueField="value"
+              maxHeight={300}
+              value={formData.group}
+            />
+          )}
+        </View>
+        {error && <InputError errors={error} />}
+        <ActionButton actionName="Create post" onSubmit={handleSubmit} />
       </View>
-      {error && <InputError errors={error} />}
-      <TouchableOpacity style={styles.button} onPress={() => handleSubmit()}>
-        <Text style={styles.buttonText}>Add Post</Text>
-      </TouchableOpacity>
     </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-  },
-  inputBox: {
-    borderColor: "#4D5B9E",
-    borderWidth: 0.2,
-    marginVertical: 5,
-    fontSize: 18,
-    padding: 12,
-    textAlignVertical: "top",
-  },
-  inputBox1: {
-    borderColor: "#4D5B9E",
-    borderWidth: 0.5,
-    marginVertical: 5,
-    fontSize: 25,
-    padding: 30,
-    marginTop: 25,
-    backgroundColor: "#F0FFFF",
-    textAlignVertical: "top",
-    textAlign: "center",
-    width: "90%",
-  },
-  inputBox2: {
-    borderColor: "#4D5B9E",
-    borderWidth: 0.5,
-    marginVertical: 25,
-    fontSize: 18,
-    padding: 60,
-    backgroundColor: "#F0FFFF",
-    textAlignVertical: "top",
-    maxHeight: 300,
-    width: "90%",
-  },
-  dropdown: {
-    borderColor: "#4D5B9E",
-    borderWidth: 0.5,
-    marginVertical: 50,
-    fontSize: 18,
-    padding: 13,
-    width: "80%",
-    backgroundColor: "#F0F8FF",
-    textAlignVertical: "top",
-    textAlign: "center",
-  },
   backgroundImage: {
     flex: 1,
     resizeMode: "cover",
     width: "100%",
-    height: "100%",
+    height: "110%",
   },
-  button: {
-    backgroundColor: "#4D5B9E",
-    borderRadius: 5,
-    paddingVertical: 12,
-    marginTop: 20,
+  container: {
+    flex: 1,
+    marginTop: "30%",
     alignItems: "center",
-    marginLeft: 35,
-    marginRight: 35,
-    marginBottom: 20,
+    gap: 60,
   },
-  buttonText: {
-    color: "#FFFFFF",
+  inputContainer: {
+    width: "90%",
+    gap: 20,
+  },
+  inputBox: {
+    backgroundColor: "white",
+    borderRadius: 20,
     fontSize: 18,
-    fontWeight: "bold",
+    paddingVertical: 19,
+    paddingHorizontal: 30,
+  },
+  inputBoxMultiline: {
+    backgroundColor: "white",
+    borderRadius: 20,
+    fontSize: 18,
+    paddingVertical: 19,
+    paddingHorizontal: 30,
+    height: 200,
+    textAlignVertical: "top",
+  },
+  dropdown: {
+    backgroundColor: "white",
+    borderRadius: 20,
+    fontSize: 18,
+    paddingVertical: 19,
+    paddingHorizontal: 30,
   },
 });
