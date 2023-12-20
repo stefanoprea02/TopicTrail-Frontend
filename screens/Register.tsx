@@ -124,6 +124,7 @@ const styles = StyleSheet.create({
     padding: 10,
     alignItems: "center",
     marginTop: "15%",
+    justifyContent: "space-between",
   },
   loginImage: {
     width: "60%",
@@ -132,15 +133,13 @@ const styles = StyleSheet.create({
   },
   loginContainer: {
     width: "90%",
-    marginTop: "20%",
-    marginBottom: "20%",
+    gap: 20,
   },
   inputBox: {
     backgroundColor: "white",
     borderRadius: 20,
-    fontSize: 18,
-    paddingVertical: 19,
+    fontSize: 16,
+    paddingVertical: 14,
     paddingHorizontal: 30,
-    marginTop: "5%",
   },
 });

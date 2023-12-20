@@ -160,27 +160,27 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    marginTop: "30%",
+    padding: 10,
     alignItems: "center",
-    paddingBottom: 30,
+    marginTop: "15%",
+    justifyContent: "space-between",
   },
   inputContainer: {
     width: "90%",
     gap: 20,
-    marginBottom: 60,
   },
   inputBox: {
     backgroundColor: "white",
     borderRadius: 20,
-    fontSize: 18,
-    paddingVertical: 19,
+    fontSize: 16,
+    paddingVertical: 14,
     paddingHorizontal: 30,
   },
   inputBoxMultiline: {
     backgroundColor: "white",
     borderRadius: 20,
-    fontSize: 18,
-    paddingVertical: 19,
+    fontSize: 16,
+    paddingVertical: 14,
     paddingHorizontal: 30,
     height: 200,
     textAlignVertical: "top",
@@ -199,8 +199,5 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     paddingHorizontal: 10,
-  },
-  groupList: {
-    marginTop: 20,
   },
 });
