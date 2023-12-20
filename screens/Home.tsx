@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
   },
   searchIcon: {
     fontSize: 30,
-    color: "#4D5B9E",
+    color: "#FFFFFF",
   },
   topBar: {
     paddingTop: 20,
