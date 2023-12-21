@@ -12,6 +12,9 @@ export default function HomePost(props) {
           {props.postCreatedAt[0]}
         </Text>
       </View>
+      <Text style={styles.userAndGroup}>
+        Posted by {props.username} in {props.group}
+      </Text>
       <Text style={styles.content}>{props.content}</Text>
     </View>
     
@@ -51,5 +54,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#808080",
     fontStyle: "italic",
+  },
+  userAndGroup: {
+    fontSize: 14,
+    color: "#808080",
+    fontStyle: "italic",
+    
   },
 });
