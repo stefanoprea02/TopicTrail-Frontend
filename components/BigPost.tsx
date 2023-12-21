@@ -127,7 +127,10 @@ export default function BigPost(props: BigPostProps) {
               keyExtractor={(item) => item.id}
             />
           )}
-          <OneLineInput handleSubmit={handleSubmit} />
+          <OneLineInput
+            handleSubmit={handleSubmit}
+            placeholderText="Add a comment"
+          />
         </View>
       </View>
     </ImageBackground>

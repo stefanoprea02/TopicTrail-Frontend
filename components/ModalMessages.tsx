@@ -47,7 +47,10 @@ export default function ModalMessages({
               </View>
             </ScrollView>
             <View style={{ padding: 10 }}>
-              <OneLineInput handleSubmit={handleSubmit} />
+              <OneLineInput
+                handleSubmit={handleSubmit}
+                placeholderText="Send a message"
+              />
             </View>
           </View>
         </View>

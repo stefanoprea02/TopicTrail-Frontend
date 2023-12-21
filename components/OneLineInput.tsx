@@ -4,9 +4,10 @@ import AntDesign from "react-native-vector-icons/AntDesign";
 
 interface OneLineInputProps {
   handleSubmit: (input: string) => void;
+  placeholderText: string;
 }
 
-export default function ({ handleSubmit }: OneLineInputProps) {
+export default function ({ handleSubmit, placeholderText }: OneLineInputProps) {
   const [formData, setFormData] = useState("");
 
   return (
@@ -15,7 +16,7 @@ export default function ({ handleSubmit }: OneLineInputProps) {
         value={formData}
         onChangeText={(text) => setFormData(text)}
         style={styles.inputBox}
-        placeholder="Send a message"
+        placeholder={placeholderText}
       />
       <TouchableOpacity
         style={styles.button}
