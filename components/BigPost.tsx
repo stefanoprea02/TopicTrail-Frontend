@@ -15,6 +15,7 @@ import Comment from "./Comment";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import Icon from "react-native-vector-icons/AntDesign";
 import { isAdmin, isModerator, removePost } from "../Functions";
+import OneLineInput from "./OneLineInput";
 
 interface BigPostProps {
   goToProfile: (username: string) => void;
@@ -23,17 +24,9 @@ interface BigPostProps {
 
 export default function BigPost(props: BigPostProps) {
   const { ip, jwt } = React.useContext(JWTContext);
-  const [formData, setFormData] = React.useState({
-    content: "",
-  });
   const [comments, setComments] = React.useState(null);
-  const [aux, setAux] = React.useState(false);
   const [userIsAdmin, setIsAdmin] = React.useState(false);
   const [userIsMod, setIsMod] = React.useState(false);
-
-  function handleChange(field, text) {
-    setFormData({ ...formData, [field]: text });
-  }
 
   const fetchComms = async () => {
     let comments = await fetch(`${ip}/post/${props.post.id}/comment`, {
@@ -58,11 +51,11 @@ export default function BigPost(props: BigPostProps) {
       await fetchComms();
     }
     fetchData();
-  }, [aux]);
+  }, []);
 
-  async function handleSubmit() {
+  async function handleSubmit(formData: string) {
     const data = new FormData();
-    data.append("text", formData.content);
+    data.append("text", formData);
     await fetch(`${ip}/post/${props.post.id}/comment/new`, {
       method: "POST",
       headers: {
@@ -71,7 +64,6 @@ export default function BigPost(props: BigPostProps) {
       },
       body: data,
     });
-    setFormData({ ...formData, ["content"]: "" });
     await fetchComms();
   }
 
@@ -135,17 +127,7 @@ export default function BigPost(props: BigPostProps) {
               keyExtractor={(item) => item.id}
             />
           )}
-          <View style={styles.commentInput}>
-            <TextInput
-              value={formData.content}
-              onChangeText={(text) => handleChange("content", text)}
-              style={styles.inputBox}
-              placeholder="Add a new comment"
-            />
-            <TouchableOpacity onPress={handleSubmit} style={styles.sendButton}>
-              <AntDesign name="right" style={styles.inputIcon}></AntDesign>
-            </TouchableOpacity>
-          </View>
+          <OneLineInput handleSubmit={handleSubmit} />
         </View>
       </View>
     </ImageBackground>

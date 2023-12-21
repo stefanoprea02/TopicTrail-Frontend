@@ -9,6 +9,7 @@ import {
 } from "../Functions";
 import { Dropdown } from "react-native-element-dropdown";
 import { CommonActions, useNavigation } from "@react-navigation/native";
+import { save } from "../Storage";
 
 interface ProfileModActionProps {
   user: User;
@@ -17,7 +18,7 @@ interface ProfileModActionProps {
 }
 
 export default function ProfileModalActions(props: ProfileModActionProps) {
-  const { jwt, ip } = useContext(JWTContext);
+  const { jwt, setJwt, ip, username, setUsername } = useContext(JWTContext);
   const [userIsAdmin, setIsAdmin] = useState(false);
   const [moderatingGroups, setModeratingGroups] = useState([]);
   const [notModeratingGroups, setNotModeratingGroups] = useState([]);
@@ -67,6 +68,12 @@ export default function ProfileModalActions(props: ProfileModActionProps) {
   useEffect(() => {
     reloadUser();
   }, []);
+
+  function logout() {
+    setJwt("");
+    setUsername("");
+    save("", "");
+  }
 
   return (
     <View style={styles.container}>
@@ -162,6 +169,12 @@ export default function ProfileModalActions(props: ProfileModActionProps) {
           Show {props.contentType === "Posts" ? "comments" : "posts"}
         </Text>
       </TouchableOpacity>
+
+      {props.user.username === username && (
+        <TouchableOpacity style={styles.button} onPress={logout}>
+          <Text style={styles.buttonText}>Sign out</Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 }
@@ -172,22 +185,19 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   dropdown: {
-    borderColor: "#4D5B9E",
-    borderWidth: 0.5,
+    backgroundColor: "white",
+    borderRadius: 20,
     fontSize: 18,
-    padding: 13,
-    width: 300,
-    backgroundColor: "#F0F8FF",
-    textAlignVertical: "top",
-    textAlign: "center",
-    marginVertical: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 30,
+    width: "80%",
   },
   button: {
-    backgroundColor: "#4D5B9E",
+    backgroundColor: "#367CFE",
     borderRadius: 5,
     alignItems: "center",
     marginVertical: 10,
-    width: 300,
+    width: "80%",
     padding: 12,
   },
   buttonText: {

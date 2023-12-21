@@ -8,12 +8,12 @@ import {
   Text,
   FlatList,
   RefreshControl,
+  StatusBar,
 } from "react-native";
 import { useState, useContext, useEffect } from "react";
 import * as ImagePicker from "expo-image-picker";
 import { JWTContext } from "../Context";
 import { getUser } from "../Functions";
-import { useRoute } from "@react-navigation/native";
 import Feather from "react-native-vector-icons/Feather";
 import Icon from "react-native-vector-icons/AntDesign";
 import Sorter from "../components/Sorter";
@@ -23,7 +23,7 @@ import Comment from "../components/Comment";
 
 const screenWidth = Dimensions.get("window").width;
 
-export default function Profile() {
+export default function Profile({ navigation, route }) {
   const { jwt, ip, username } = useContext(JWTContext);
   const [user, setUser] = useState<User>(null);
   const [showAdminAction, setShowAdminAction] = useState(false);
@@ -32,8 +32,9 @@ export default function Profile() {
   const [comments, setComments] = useState<Comment[]>([]);
   const [posts, setPosts] = useState<Post[]>([]);
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const route = useRoute();
-  const profileUsername = route.params?.name || username;
+  const [profileUsername, setProfileUsername] = useState(
+    route.params?.name || username
+  );
 
   async function reloadUser() {
     const res = await getUser(ip, jwt, profileUsername);
@@ -64,8 +65,15 @@ export default function Profile() {
   }
 
   useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
+      setProfileUsername(route.params?.name || username);
+    });
+    return unsubscribe;
+  }, [navigation, route.params?.name]);
+
+  useEffect(() => {
     reloadUser();
-  }, []);
+  }, [profileUsername]);
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -141,12 +149,22 @@ export default function Profile() {
             style={styles.topActionButtonContainer}
             onPress={() => setShowAdminAction((prev) => !prev)}
           >
-            <Feather name="clipboard" size={24} />
+            <Feather name="settings" size={24} />
           </TouchableOpacity>
-          <Text style={styles.username}>
-            <Icon name="user" style={styles.icon} />
-            {profileUsername}
-          </Text>
+          <View style={styles.usernameContainer}>
+            {profileUsername !== username && (
+              <TouchableOpacity
+                style={{ marginRight: 10 }}
+                onPress={() => setProfileUsername(username)}
+              >
+                <Icon name="left" size={24} />
+              </TouchableOpacity>
+            )}
+            <Text style={styles.username}>
+              <Icon name="user" style={styles.icon} />
+              {profileUsername}
+            </Text>
+          </View>
           <TouchableOpacity
             style={styles.topActionButtonContainer}
             onPress={() => setShowBioEdit(true)}
@@ -211,14 +229,15 @@ const styles = StyleSheet.create({
     resizeMode: "cover",
     width: "100%",
     height: "100%",
+    marginTop: StatusBar.currentHeight,
   },
   imageContainer: {
     position: "relative",
     alignItems: "center",
   },
   image: {
-    width: 180,
-    height: 180,
+    width: 100,
+    height: 100,
     borderRadius: 200,
   },
   iconContainer: {
@@ -227,18 +246,18 @@ const styles = StyleSheet.create({
     borderRadius: 200,
     alignSelf: "flex-start",
     padding: 10,
-    top: 160,
-    left: screenWidth / 2 + 40,
+    top: 120,
+    left: screenWidth / 2 + 20,
   },
   topActionButtonContainer: {
     backgroundColor: "white",
     borderRadius: 200,
     padding: 10,
   },
+  usernameContainer: { flexDirection: "row", alignItems: "center" },
   username: {
-    fontSize: 22,
+    fontSize: 18,
     alignItems: "center",
-    marginTop: 10,
   },
   icon: {
     fontSize: 18,

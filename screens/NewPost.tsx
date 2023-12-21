@@ -36,7 +36,6 @@ export default function NewPost() {
     data.append("content", formData.content);
     data.append("group", formData.group);
     data.append("id", formData.id);
-    console.log(formData);
     fetch(`${ip}/post/new`, {
       method: "POST",
       headers: {
@@ -147,15 +146,15 @@ const styles = StyleSheet.create({
   inputBox: {
     backgroundColor: "white",
     borderRadius: 20,
-    fontSize: 16,
-    paddingVertical: 14,
+    fontSize: 18,
+    paddingVertical: 19,
     paddingHorizontal: 30,
   },
   inputBoxMultiline: {
     backgroundColor: "white",
     borderRadius: 20,
-    fontSize: 16,
-    paddingVertical: 14,
+    fontSize: 18,
+    paddingVertical: 19,
     paddingHorizontal: 30,
     height: 200,
     textAlignVertical: "top",

@@ -11,6 +11,7 @@ import {
 
 import Icon from "react-native-vector-icons/AntDesign";
 import { JWTContext } from "../Context";
+import ActionButton from "./ActionButton";
 
 interface EditBioProps {
   showBioEdit: boolean;
@@ -50,24 +51,13 @@ export default function EditBio(props: EditBioProps) {
         source={require("../assets/Background.jpeg")}
         style={styles.backgroundImage}
       >
-        <View
-          style={{
-            flex: 1,
-            alignItems: "center",
-            justifyContent: "space-around",
-          }}
-        >
+        <View style={styles.container}>
           <TextInput
             value={bio}
             onChangeText={setBio}
             style={styles.inputBox}
           />
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => handleSubmit()}
-          >
-            <Text style={styles.buttonText}>Edit bio</Text>
-          </TouchableOpacity>
+          <ActionButton actionName="Edit bio" onSubmit={handleSubmit} />
         </View>
       </ImageBackground>
     </Modal>
@@ -93,31 +83,19 @@ const styles = StyleSheet.create({
     fontSize: 30,
     color: "#4D5B9E",
   },
-  inputBox: {
-    borderColor: "#4D5B9E",
-    borderWidth: 0.5,
-    marginVertical: 5,
-    fontSize: 25,
-    padding: 30,
-    marginTop: 25,
-    backgroundColor: "#F0FFFF",
-    textAlignVertical: "top",
-    textAlign: "center",
-    width: "90%",
-  },
-  button: {
-    backgroundColor: "#4D5B9E",
-    borderRadius: 5,
-    marginTop: 20,
+  container: {
+    flex: 1,
     alignItems: "center",
-    marginLeft: 35,
-    marginRight: 35,
-    marginBottom: 20,
-    padding: 20,
+    justifyContent: "space-between",
+    marginTop: "15%",
+    marginBottom: "5%",
   },
-  buttonText: {
-    color: "#FFFFFF",
+  inputBox: {
+    backgroundColor: "white",
+    borderRadius: 20,
     fontSize: 18,
-    fontWeight: "bold",
+    paddingVertical: 19,
+    paddingHorizontal: 30,
+    width: "90%",
   },
 });

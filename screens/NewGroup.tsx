@@ -135,17 +135,18 @@ export default function NewGroup() {
             placeholder="Description"
             multiline={true}
           />
-          {error && <InputError errors={error} />}
+        </View>
+        {error && <InputError errors={error} />}
+        <View style={styles.groupList}>
+          {userIsAdmin && (
+            <FlatList
+              data={unapprovedGroups}
+              renderItem={renderUnapprovedGroups}
+              keyExtractor={(item) => item.id}
+            />
+          )}
         </View>
         <ActionButton actionName="Create group" onSubmit={handleSubmit} />
-        {userIsAdmin && (
-          <FlatList
-            style={styles.groupList}
-            data={unapprovedGroups}
-            renderItem={renderUnapprovedGroups}
-            keyExtractor={(item) => item.id}
-          />
-        )}
       </View>
     </ImageBackground>
   );
@@ -172,15 +173,15 @@ const styles = StyleSheet.create({
   inputBox: {
     backgroundColor: "white",
     borderRadius: 20,
-    fontSize: 16,
-    paddingVertical: 14,
+    fontSize: 18,
+    paddingVertical: 19,
     paddingHorizontal: 30,
   },
   inputBoxMultiline: {
     backgroundColor: "white",
     borderRadius: 20,
-    fontSize: 16,
-    paddingVertical: 14,
+    fontSize: 18,
+    paddingVertical: 19,
     paddingHorizontal: 30,
     height: 200,
     textAlignVertical: "top",
@@ -199,5 +200,8 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     paddingHorizontal: 10,
+  },
+  groupList: {
+    height: "30%",
   },
 });

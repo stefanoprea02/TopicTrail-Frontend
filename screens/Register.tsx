@@ -64,7 +64,7 @@ export default function Register() {
               }
             });
         } else {
-          console.log("Bad username");
+          setErrors(["Bad username"]);
         }
       });
 
@@ -138,8 +138,8 @@ const styles = StyleSheet.create({
   inputBox: {
     backgroundColor: "white",
     borderRadius: 20,
-    fontSize: 16,
-    paddingVertical: 14,
+    fontSize: 18,
+    paddingVertical: 19,
     paddingHorizontal: 30,
   },
 });

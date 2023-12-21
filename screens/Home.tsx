@@ -1,25 +1,19 @@
 import React from "react";
-import { ImageBackground, ListRenderItemInfo } from "react-native";
+import { ImageBackground, StatusBar } from "react-native";
 
-import { View, StyleSheet, Modal, Text, TouchableOpacity } from "react-native";
-import { save } from "../Storage";
+import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
 import { JWTContext } from "../Context";
 import Icon from "react-native-vector-icons/AntDesign";
 import SearchModal from "../components/SearchModal";
 import Sorter from "../components/Sorter";
 
 export default function Home() {
-  const { jwt, setJwt, ip } = React.useContext(JWTContext);
+  const { jwt, ip } = React.useContext(JWTContext);
   const [posts, setPosts] = React.useState<Post[]>([]);
   const [isSearching, setIsSearching] = React.useState(false);
   const [aux, setAux] = React.useState(false);
   const [group, setGroup] = React.useState<Group>(null);
   const [user, setUser] = React.useState<User>(null);
-
-  function logout() {
-    setJwt("");
-    save("", "");
-  }
 
   React.useEffect(() => {
     async function fetchData() {
@@ -82,14 +76,15 @@ export default function Home() {
       )}
 
       <Sorter posts={posts} setAux={setAux} />
-
-      <TouchableOpacity style={styles.button} onPress={logout}>
-        <Text style={styles.buttonText}>Sign out</Text>
-      </TouchableOpacity>
     </ImageBackground>
   );
 }
 const styles = StyleSheet.create({
+  backgroundImage: {
+    flex: 1,
+    resizeMode: "cover",
+    marginTop: StatusBar.currentHeight,
+  },
   container: {
     flex: 1,
     backgroundColor: "#F4F6FB",
@@ -118,10 +113,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#4D5B9E",
     textAlign: "center",
-  },
-  backgroundImage: {
-    flex: 1,
-    resizeMode: "cover",
   },
   button: {
     backgroundColor: "#4D5B9E",

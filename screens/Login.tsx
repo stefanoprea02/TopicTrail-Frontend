@@ -1,29 +1,30 @@
 import React from "react";
-import { Image, ImageBackground, TouchableOpacity } from "react-native";
-import { View, Text, TextInput, StyleSheet } from "react-native";
+import { Image, ImageBackground } from "react-native";
+import { View, TextInput, StyleSheet } from "react-native";
 import { save } from "../Storage";
 import { JWTContext } from "../Context";
-import { AntDesign } from "react-native-vector-icons";
 import ActionButton from "../components/ActionButton";
+import InputError from "../components/InputError";
 
 export default function Login() {
-  const { setJwt, ip } = React.useContext(JWTContext);
+  const { setJwt, ip, setUsername } = React.useContext(JWTContext);
   const [formData, setFormData] = React.useState({
     username: "admin",
     password: "admin",
   });
+  const [error, setErrors] = React.useState(null);
 
   function handleChange(field: string, text: string) {
     setFormData({ ...formData, [field]: text });
   }
 
-  function handleSubmit() {
+  async function handleSubmit() {
     const data = new FormData();
     data.append("username", formData.username);
     data.append("password", formData.password);
 
     try {
-      fetch(`${ip}/api/auth/login`, {
+      await fetch(`${ip}/api/auth/login`, {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -31,14 +32,17 @@ export default function Login() {
         body: data,
       })
         .then((response) => {
-          return response.text();
+          if (response.status === 200) return response.text();
+          else throw new Error("Bad credentials");
         })
         .then((data) => {
           setJwt(data);
+          setUsername(formData.username);
           save(data, formData.username);
+          return data;
         });
     } catch (err) {
-      console.log(err);
+      setErrors(err.message);
     }
   }
 
@@ -68,6 +72,7 @@ export default function Login() {
             secureTextEntry={true}
             autoCapitalize="none"
           />
+          {error && <InputError errors={[error]} />}
         </View>
         <ActionButton actionName="Sign in" onSubmit={handleSubmit} />
       </View>
@@ -101,8 +106,8 @@ const styles = StyleSheet.create({
   inputBox: {
     backgroundColor: "white",
     borderRadius: 20,
-    fontSize: 16,
-    paddingVertical: 14,
+    fontSize: 18,
+    paddingVertical: 19,
     paddingHorizontal: 30,
   },
 });

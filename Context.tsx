@@ -11,7 +11,7 @@ function JWTProvider(props) {
   const [username, setUsername] = useState<string>(null);
 
   const value = React.useMemo(() => {
-    return { jwt, setJwt, ip, username };
+    return { jwt, setJwt, ip, username, setUsername };
   }, [jwt, ip, username]);
 
   React.useEffect(() => {
