@@ -36,6 +36,8 @@ export default function Sorter(props: SorterProps) {
             title={listItem.item.title}
             content={listItem.item.content}
             postCreatedAt={listItem.item.postCreatedAt}
+            group = {listItem.item.group}
+            username = {listItem.item.username}
           />
         </Animated.View>
       </TouchableWithoutFeedback>

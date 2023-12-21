@@ -62,6 +62,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 15,
     marginTop: 30,
+    marginBottom: 15,
   },
   sortButton: {
     fontSize: 16,
