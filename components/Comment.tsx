@@ -10,11 +10,11 @@ export default function Comment(props) {
     <View style={styles.comment}>
       <View style={styles.topBar}>
         <Text style={styles.username}>
-          <Icon name="user" />
+          <Icon name="user" style = {styles.userIcon} />
           {props.username}
         </Text>
-        <Text style={styles.username}>
-          {props.createdAt[2]} {props.createdAt[1]} {props.createdAt[0]}
+        <Text style={styles.postCreatedAt}>
+          {props.createdAt[2]}.{props.createdAt[1]}.{props.createdAt[0]}
         </Text>
       </View>
       <View style={styles.topBar}>
@@ -36,20 +36,43 @@ export default function Comment(props) {
 
 const styles = StyleSheet.create({
   comment: {
-    padding: 10,
+    backgroundColor: "#FFFFFF",
+    borderRadius: 15, 
+    padding: 15, 
+    shadowColor: "#000000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,
+    marginVertical: 10,
   },
   topBar: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    marginBottom: 10, 
   },
   username: {
-    fontSize: 15,
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#367CFE", 
   },
   comText: {
-    fontSize: 20,
+    fontSize: 16,
+    color: "#333", 
+    marginBottom: 10, 
   },
   icon: {
-    fontSize: 26,
+    fontSize: 28,
+    color: "#FF6347",
+  },
+  userIcon:{
+    fontSize: 15,
+  },
+  postCreatedAt: {
+    fontSize: 14,
+    color: "#808080",
+    fontStyle: "italic",
+    marginBottom: 5, 
   },
 });
