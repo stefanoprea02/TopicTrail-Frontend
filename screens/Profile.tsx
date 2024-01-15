@@ -13,13 +13,14 @@ import {
 import { useState, useContext, useEffect } from "react";
 import * as ImagePicker from "expo-image-picker";
 import { JWTContext } from "../Context";
-import { getUser } from "../Functions";
+import { getUser, getFavoritePosts } from "../Functions";
 import Feather from "react-native-vector-icons/Feather";
 import Icon from "react-native-vector-icons/AntDesign";
 import Sorter from "../components/Sorter";
 import ProfileModalActions from "../components/ProfileModActions";
 import EditBio from "../components/EditBio";
 import Comment from "../components/Comment";
+import HomePost from "../components/HomePost";
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -28,13 +29,16 @@ export default function Profile({ navigation, route }) {
   const [user, setUser] = useState<User>(null);
   const [showAdminAction, setShowAdminAction] = useState(false);
   const [showBioEdit, setShowBioEdit] = useState(false);
-  const [contentType, setContentType] = useState<"Posts" | "Comments">("Posts");
+  const [contentType, setContentType] = useState<
+    "Posts" | "Comments" | "Favorites"
+  >("Posts");
   const [comments, setComments] = useState<Comment[]>([]);
   const [posts, setPosts] = useState<Post[]>([]);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [profileUsername, setProfileUsername] = useState(
     route.params?.name || username
   );
+  const [favoritePosts, setFavoritePosts] = useState([]);
 
   async function reloadUser() {
     const res = await getUser(ip, jwt, profileUsername);
@@ -51,7 +55,10 @@ export default function Profile({ navigation, route }) {
       .then((data) => data);
 
     setPosts(posts);
-
+    if (contentType === "Favorites") {
+      const favPosts = await getFavoritePosts(ip, jwt, profileUsername);
+      setFavoritePosts(favPosts);
+    }
     let comments = await fetch(`${ip}/comments/${profileUsername}`, {
       method: "GET",
       headers: {
@@ -109,12 +116,34 @@ export default function Profile({ navigation, route }) {
   };
 
   const renderComments = ({ item }) => {
+    if (!item) {
+      return null;
+    }
     return (
       <Comment
         text={item.text}
         username={item.username}
         createdAt={item.createdAt}
         postId={item.postId}
+        content={item.content}
+        id={item.id}
+        ip={ip}
+        jwt={jwt}
+        fetchComms={reloadUser}
+      />
+    );
+  };
+  const renderFavorites = ({ item }) => {
+    if (!item) {
+      return null;
+    }
+    return (
+      <Comment
+        text={item.text}
+        username={item.username}
+        createdAt={item.createdAt}
+        postId={item.postId}
+        content={item.content}
         id={item.id}
         ip={ip}
         jwt={jwt}
@@ -196,12 +225,12 @@ export default function Profile({ navigation, route }) {
         />
       )}
 
-      {contentType === "Posts" ? (
+      {contentType === "Favorites" ? (
         <Sorter posts={posts} />
-      ) : (
+        ) : (
         <FlatList
-          data={comments}
-          renderItem={renderComments}
+          data={favoritePosts}
+          renderItem={renderFavorites}
           keyExtractor={(item) => item.id}
           refreshControl={
             <RefreshControl
@@ -210,7 +239,21 @@ export default function Profile({ navigation, route }) {
             />
           }
         />
-      )}
+      ) } contentType === "Posts" ? (
+        <Sorter posts={posts} />
+      ) : (
+        <FlatList
+          data={comments}
+          renderItem={({ item }) => <HomePost post={item} />}
+          keyExtractor={(item) => item.id}
+          refreshControl={
+            <RefreshControl
+              refreshing={isRefreshing}
+              onRefresh={handleRefresh}
+            />
+          }
+        />
+      )
 
       <EditBio
         showBioEdit={showBioEdit}

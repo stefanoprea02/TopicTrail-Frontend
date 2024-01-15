@@ -56,7 +56,7 @@ export default function PostModal(props: PostModalProps) {
               setFavorite(false);
             }}
           >
-            <FontAwesome name="bookmark" style={styles.icon}></FontAwesome>
+            <FontAwesome name="heart" style={styles.icon}></FontAwesome>
           </TouchableOpacity>
         ) : (
           <TouchableOpacity
@@ -65,7 +65,7 @@ export default function PostModal(props: PostModalProps) {
               setFavorite(true);
             }}
           >
-            <FontAwesome name="bookmark-o" style={styles.icon}></FontAwesome>
+            <FontAwesome name="heart-o" style={styles.icon}></FontAwesome>
           </TouchableOpacity>
         )}
       </View>
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
   },
   icon: {
     fontSize: 30,
-    color: "#4D5B9E",
+    color: "#367CFE",
   },
   topBar: {
     paddingTop: 10,

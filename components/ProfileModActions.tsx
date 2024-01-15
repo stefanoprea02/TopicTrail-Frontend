@@ -13,8 +13,8 @@ import { save } from "../Storage";
 
 interface ProfileModActionProps {
   user: User;
-  contentType: "Posts" | "Comments";
-  setContentType: (value: "Posts" | "Comments") => void;
+  contentType: "Posts" | "Comments" | "Favorites";
+  setContentType: (value: "Posts" | "Comments" | "Favorites") => void;
 }
 
 export default function ProfileModalActions(props: ProfileModActionProps) {
@@ -169,7 +169,12 @@ export default function ProfileModalActions(props: ProfileModActionProps) {
           Show {props.contentType === "Posts" ? "comments" : "posts"}
         </Text>
       </TouchableOpacity>
-
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => props.setContentType("Favorites")}
+      >
+        <Text style={styles.buttonText}>Show Favorite Posts</Text>
+      </TouchableOpacity>
       {props.user.username === username && (
         <TouchableOpacity style={styles.button} onPress={logout}>
           <Text style={styles.buttonText}>Sign out</Text>
