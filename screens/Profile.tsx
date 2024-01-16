@@ -240,7 +240,7 @@ export default function Profile({ navigation, route }) {
 
       {contentType === "Favorites" && (
         <FlatList
-          data={comments}
+          data={favoritePosts}
           renderItem={renderFavorites}
           keyExtractor={(item) => item.id}
           refreshControl={
