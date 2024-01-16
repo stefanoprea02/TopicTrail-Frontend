@@ -44,6 +44,8 @@ export default function Profile({ navigation, route }) {
     const res = await getUser(ip, jwt, profileUsername);
     setUser(res);
 
+    console.log(contentType);
+    
     let posts = await fetch(`${ip}/post/all?username=${profileUsername}`, {
       method: "GET",
       headers: {
@@ -54,11 +56,13 @@ export default function Profile({ navigation, route }) {
       .then((response) => response.json())
       .then((data) => data);
 
-    setPosts(posts);
     if (contentType === "Favorites") {
       const favPosts = await getFavoritePosts(ip, jwt, profileUsername);
       setFavoritePosts(favPosts);
     }
+
+    setPosts(posts);
+
     let comments = await fetch(`${ip}/comments/${profileUsername}`, {
       method: "GET",
       headers: {
@@ -116,16 +120,12 @@ export default function Profile({ navigation, route }) {
   };
 
   const renderComments = ({ item }) => {
-    if (!item) {
-      return null;
-    }
     return (
       <Comment
         text={item.text}
         username={item.username}
         createdAt={item.createdAt}
         postId={item.postId}
-        content={item.content}
         id={item.id}
         ip={ip}
         jwt={jwt}
@@ -133,21 +133,18 @@ export default function Profile({ navigation, route }) {
       />
     );
   };
+
   const renderFavorites = ({ item }) => {
-    if (!item) {
-      return null;
-    }
     return (
       <Comment
         text={item.text}
         username={item.username}
         createdAt={item.createdAt}
         postId={item.postId}
-        content={item.content}
         id={item.id}
         ip={ip}
         jwt={jwt}
-        fetchComms={reloadUser}
+        fetchFavs={reloadUser}
       />
     );
   };
@@ -225,11 +222,25 @@ export default function Profile({ navigation, route }) {
         />
       )}
 
-      {contentType === "Favorites" ? (
-        <Sorter posts={posts} />
-        ) : (
+      {contentType === "Posts" && <Sorter posts={posts} />}
+
+      {contentType === "Comments" && (
         <FlatList
-          data={favoritePosts}
+          data={comments}
+          renderItem={renderComments}
+          keyExtractor={(item) => item.id}
+          refreshControl={
+            <RefreshControl
+              refreshing={isRefreshing}
+              onRefresh={handleRefresh}
+            />
+          }
+        />
+      )}
+
+      {contentType === "Favorites" && (
+        <FlatList
+          data={comments}
           renderItem={renderFavorites}
           keyExtractor={(item) => item.id}
           refreshControl={
@@ -239,21 +250,7 @@ export default function Profile({ navigation, route }) {
             />
           }
         />
-      ) } contentType === "Posts" ? (
-        <Sorter posts={posts} />
-      ) : (
-        <FlatList
-          data={comments}
-          renderItem={({ item }) => <HomePost post={item} />}
-          keyExtractor={(item) => item.id}
-          refreshControl={
-            <RefreshControl
-              refreshing={isRefreshing}
-              onRefresh={handleRefresh}
-            />
-          }
-        />
-      )
+      )}
 
       <EditBio
         showBioEdit={showBioEdit}

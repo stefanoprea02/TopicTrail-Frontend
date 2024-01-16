@@ -7,17 +7,18 @@ export default function HomePost(props) {
   return (
     <View style={styles.homePost}>
       <View style={styles.header}>
-        <Text style={styles.title}>{props.title||"No title"}</Text>
+        <Text style={styles.title}>{props.title || "No title"}</Text>
         <Text style={styles.postCreatedAt}>
-        {props.postCreatedAt ? `${props.postCreatedAt[2]}.${props.postCreatedAt[1]}.${props.postCreatedAt[0]}` : ''}
+        {props.postCreatedAt ?
+         `${props.postCreatedAt[2]}.${props.postCreatedAt[1]}.${props.postCreatedAt[0]}` 
+         : ''}
         </Text>
       </View>
       <Text style={styles.userAndGroup}>
         Posted by {props.username} in {props.group}
       </Text>
-      <Text style={styles.content}>{props.content||"No content"}</Text>
+      <Text style={styles.content}>{props.content || "No content"}</Text>
     </View>
-    
   );
 }
 
@@ -59,6 +60,5 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#808080",
     fontStyle: "italic",
-    
   },
 });

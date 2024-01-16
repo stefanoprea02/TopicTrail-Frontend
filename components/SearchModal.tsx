@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
     color: "lightblue",
   },
   inputBox: {
-    borderColor: "#4D5B9E",
+    borderColor: "#367CFE",
     borderWidth: 1,
     borderRadius: 8,
     fontSize: 18,
@@ -127,6 +127,6 @@ const styles = StyleSheet.create({
   },
   searchIcon: {
     fontSize: 30,
-    color: "#4D5B9E",
+    color: "#367CFE",
   },
 });

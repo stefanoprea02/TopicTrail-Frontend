@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
   },
   modalIcon: {
     fontSize: 30,
-    color: "#4D5B9E",
+    color: "#367CFE",
   },
   container: {
     flex: 1,

@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
   groupName: {
     fontSize: 24,
     fontWeight: "bold",
-    color: "#4D5B9E",
+    color: "#367CFE",
   },
   secondBar: {
     alignItems: "center",
@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
   },
   groupDescription: {
     fontSize: 16,
-    color: "#4D5B9E",
+    color: "#367CFE",
     textAlign: "center",
   },
   backgroundImage: {
@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
     resizeMode: "cover",
   },
   button: {
-    backgroundColor: "#4D5B9E",
+    backgroundColor: "#367CFE",
     borderRadius: 5,
     paddingVertical: 12,
     marginTop: 20,
