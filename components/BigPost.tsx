@@ -180,7 +180,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   inputBox: {
-    borderColor: "#4D5B9E",
+    borderColor: "#367CFE",
     borderWidth: 0.5,
     marginVertical: 10,
     fontSize: 18,
@@ -192,7 +192,7 @@ const styles = StyleSheet.create({
   sendButton: {
     alignItems: "center",
     justifyContent: "center",
-    borderColor: "#4D5B9E",
+    borderColor: "#367CFE",
     borderWidth: 0.5,
     padding: 8,
     marginTop: 10,

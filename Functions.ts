@@ -8,6 +8,19 @@ export async function adFavorite(ip: string, jwt: string, id: string) {
   });
 }
 
+export async function getFavoritePosts(ip: string, jwt: string, username: string) {
+  return await fetch(`${ip}/post/favorites?username=${username}`, {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      Authorization: `Bearer ${jwt}`,
+    },
+  })
+  .then(response => response.json())
+  .then(data => data)
+  .catch(error => console.error("Error fetching favorite posts:", error));
+}
+
 export async function removeFavorite(ip: string, jwt: string, id: string) {
   return await fetch(`${ip}/post/removeFavorite/${id}`, {
     method: "GET",

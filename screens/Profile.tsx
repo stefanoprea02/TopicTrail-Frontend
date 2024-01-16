@@ -9,17 +9,21 @@ import {
   FlatList,
   RefreshControl,
   StatusBar,
+  ListRenderItemInfo,
+  TouchableWithoutFeedback,
+  Animated,
 } from "react-native";
 import { useState, useContext, useEffect } from "react";
 import * as ImagePicker from "expo-image-picker";
 import { JWTContext } from "../Context";
-import { getUser } from "../Functions";
+import { getUser, getFavoritePosts } from "../Functions";
 import Feather from "react-native-vector-icons/Feather";
 import Icon from "react-native-vector-icons/AntDesign";
 import Sorter from "../components/Sorter";
 import ProfileModalActions from "../components/ProfileModActions";
 import EditBio from "../components/EditBio";
 import Comment from "../components/Comment";
+import HomePost from "../components/HomePost";
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -28,17 +32,22 @@ export default function Profile({ navigation, route }) {
   const [user, setUser] = useState<User>(null);
   const [showAdminAction, setShowAdminAction] = useState(false);
   const [showBioEdit, setShowBioEdit] = useState(false);
-  const [contentType, setContentType] = useState<"Posts" | "Comments">("Posts");
+  const [contentType, setContentType] = useState<
+    "Posts" | "Comments" | "Favorites"
+  >("Posts");
   const [comments, setComments] = useState<Comment[]>([]);
   const [posts, setPosts] = useState<Post[]>([]);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [profileUsername, setProfileUsername] = useState(
     route.params?.name || username
   );
+  const [favoritePosts, setFavoritePosts] = useState([]);
 
   async function reloadUser() {
     const res = await getUser(ip, jwt, profileUsername);
     setUser(res);
+
+    console.log(contentType);
 
     let posts = await fetch(`${ip}/post/all?username=${profileUsername}`, {
       method: "GET",
@@ -49,6 +58,9 @@ export default function Profile({ navigation, route }) {
     })
       .then((response) => response.json())
       .then((data) => data);
+
+    const favPosts = await getFavoritePosts(ip, jwt, profileUsername);
+    setFavoritePosts(favPosts);
 
     setPosts(posts);
 
@@ -196,9 +208,9 @@ export default function Profile({ navigation, route }) {
         />
       )}
 
-      {contentType === "Posts" ? (
-        <Sorter posts={posts} />
-      ) : (
+      {contentType === "Posts" && <Sorter posts={posts} />}
+
+      {contentType === "Comments" && (
         <FlatList
           data={comments}
           renderItem={renderComments}
@@ -211,6 +223,7 @@ export default function Profile({ navigation, route }) {
           }
         />
       )}
+      {contentType === "Favorites" && <Sorter posts={favoritePosts} />}
 
       <EditBio
         showBioEdit={showBioEdit}
