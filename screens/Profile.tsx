@@ -9,6 +9,9 @@ import {
   FlatList,
   RefreshControl,
   StatusBar,
+  ListRenderItemInfo,
+  TouchableWithoutFeedback,
+  Animated,
 } from "react-native";
 import { useState, useContext, useEffect } from "react";
 import * as ImagePicker from "expo-image-picker";
@@ -45,7 +48,7 @@ export default function Profile({ navigation, route }) {
     setUser(res);
 
     console.log(contentType);
-    
+
     let posts = await fetch(`${ip}/post/all?username=${profileUsername}`, {
       method: "GET",
       headers: {
@@ -56,10 +59,8 @@ export default function Profile({ navigation, route }) {
       .then((response) => response.json())
       .then((data) => data);
 
-    if (contentType === "Favorites") {
-      const favPosts = await getFavoritePosts(ip, jwt, profileUsername);
-      setFavoritePosts(favPosts);
-    }
+    const favPosts = await getFavoritePosts(ip, jwt, profileUsername);
+    setFavoritePosts(favPosts);
 
     setPosts(posts);
 
@@ -130,24 +131,6 @@ export default function Profile({ navigation, route }) {
         ip={ip}
         jwt={jwt}
         fetchComms={reloadUser}
-      />
-    );
-  };
-
-  const renderFavorites = ({ item }) => {
-    return (
-      <HomePost
-        text={item.text}
-        title={item.title}
-        username={item.username}
-        createdAt={item.createdAt}
-        postId={item.postId}
-        id={item.id}
-        content ={item.content}
-        postCreatedAt={item.postCreatedAt}
-        ip={ip}
-        jwt={jwt}
-        fetchFavs={reloadUser}
       />
     );
   };
@@ -240,20 +223,7 @@ export default function Profile({ navigation, route }) {
           }
         />
       )}
-      {/* {contentType === "Favorites" && <Sorter posts={favoritePosts} />} */}
-      {contentType === "Favorites" && (
-        <FlatList
-          data={favoritePosts}
-          renderItem={renderFavorites}
-          keyExtractor={(item) => item.id}
-          refreshControl={
-            <RefreshControl
-              refreshing={isRefreshing}
-              onRefresh={handleRefresh}
-            />
-          }
-        />
-      )}
+      {contentType === "Favorites" && <Sorter posts={favoritePosts} />}
 
       <EditBio
         showBioEdit={showBioEdit}
