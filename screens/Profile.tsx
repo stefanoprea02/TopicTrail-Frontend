@@ -136,12 +136,15 @@ export default function Profile({ navigation, route }) {
 
   const renderFavorites = ({ item }) => {
     return (
-      <Comment
+      <HomePost
         text={item.text}
+        title={item.title}
         username={item.username}
         createdAt={item.createdAt}
         postId={item.postId}
         id={item.id}
+        content ={item.content}
+        postCreatedAt={item.postCreatedAt}
         ip={ip}
         jwt={jwt}
         fetchFavs={reloadUser}
@@ -237,7 +240,7 @@ export default function Profile({ navigation, route }) {
           }
         />
       )}
-
+      {/* {contentType === "Favorites" && <Sorter posts={favoritePosts} />} */}
       {contentType === "Favorites" && (
         <FlatList
           data={favoritePosts}
