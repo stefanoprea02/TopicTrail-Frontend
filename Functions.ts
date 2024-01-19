@@ -8,7 +8,11 @@ export async function adFavorite(ip: string, jwt: string, id: string) {
   });
 }
 
-export async function getFavoritePosts(ip: string, jwt: string, username: string) {
+export async function getFavoritePosts(
+  ip: string,
+  jwt: string,
+  username: string
+) {
   return await fetch(`${ip}/post/favorites?username=${username}`, {
     method: "GET",
     headers: {
@@ -16,9 +20,9 @@ export async function getFavoritePosts(ip: string, jwt: string, username: string
       Authorization: `Bearer ${jwt}`,
     },
   })
-  .then(response => response.json())
-  .then(data => data)
-  .catch(error => console.error("Error fetching favorite posts:", error));
+    .then((response) => response.json())
+    .then((data) => data)
+    .catch((error) => console.error("Error fetching favorite posts:", error));
 }
 
 export async function removeFavorite(ip: string, jwt: string, id: string) {
@@ -49,6 +53,56 @@ export async function getUser(
   username: string
 ): Promise<User> {
   return await fetch(`${ip}/user/${username}`, {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      Authorization: `Bearer ${jwt}`,
+    },
+  })
+    .then((response) => response.json())
+    .then((data) => data);
+}
+
+export async function joinGroup(
+  ip: string,
+  jwt: string,
+  group: string
+): Promise<void> {
+  await fetch(`${ip}/group/join/${group}`, {
+    method: "GEt",
+    headers: {
+      Accept: "application/json",
+      Authorization: `Bearer ${jwt}`,
+    },
+  })
+    .then((response) => response.json())
+    .then((data) => data);
+  return;
+}
+
+export async function leaveGroup(
+  ip: string,
+  jwt: string,
+  group: string
+): Promise<void> {
+  await fetch(`${ip}/group/leave/${group}`, {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      Authorization: `Bearer ${jwt}`,
+    },
+  })
+    .then((response) => response.json())
+    .then((data) => data);
+  return;
+}
+
+export async function groupFindByUser(
+  ip: string,
+  jwt: string,
+  username: string
+): Promise<Group[]> {
+  return await fetch(`${ip}/group/findByUser/${username}`, {
     method: "GET",
     headers: {
       Accept: "application/json",

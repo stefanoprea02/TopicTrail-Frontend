@@ -3,15 +3,14 @@ import { Text } from "react-native";
 import { View, StyleSheet } from "react-native";
 
 export default function HomePost(props) {
-  console.log("Post Object:", props.post);
   return (
     <View style={styles.homePost}>
       <View style={styles.header}>
         <Text style={styles.title}>{props.title || "No title"}</Text>
         <Text style={styles.postCreatedAt}>
-        {props.postCreatedAt ?
-         `${props.postCreatedAt[2]}.${props.postCreatedAt[1]}.${props.postCreatedAt[0]}` 
-         : ''}
+          {props.postCreatedAt
+            ? `${props.postCreatedAt[2]}.${props.postCreatedAt[1]}.${props.postCreatedAt[0]}`
+            : ""}
         </Text>
       </View>
       <Text style={styles.userAndGroup}>

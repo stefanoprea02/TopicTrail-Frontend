@@ -13,13 +13,15 @@ import { save } from "../Storage";
 
 interface ProfileModActionProps {
   user: User;
-  contentType: "Posts" | "Comments" | "Favorites";
-  setContentType: (value: "Posts" | "Comments" | "Favorites") => void;
+  contentType: "Posts" | "Comments" | "Favorites" | "Groups";
+  setContentType: (
+    value: "Posts" | "Comments" | "Favorites" | "Groups"
+  ) => void;
 }
 
 export default function ProfileModalActions(props: ProfileModActionProps) {
   const { jwt, setJwt, ip, username, setUsername } = useContext(JWTContext);
-  const [userIsAdmin, setIsAdmin] = useState(false);
+  const [userIsAdmin, setIsAdmin] = useState<boolean | null>(null);
   const [moderatingGroups, setModeratingGroups] = useState([]);
   const [notModeratingGroups, setNotModeratingGroups] = useState([]);
   const [addMod, setAddMod] = useState(false);
@@ -74,6 +76,8 @@ export default function ProfileModalActions(props: ProfileModActionProps) {
     setUsername("");
     save("", "");
   }
+
+  if (userIsAdmin === null) return <></>;
 
   return (
     <View style={styles.container}>
@@ -159,22 +163,30 @@ export default function ProfileModalActions(props: ProfileModActionProps) {
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.button}
-        onPress={() =>
-          props.setContentType(
-            props.contentType === "Posts" ? "Comments" : "Posts"
-          )
-        }
+        onPress={() => props.setContentType("Comments")}
       >
-        <Text style={styles.buttonText}>
-          Show {props.contentType === "Posts" ? "Comments" : "Posts"}
-        </Text>
+        <Text style={styles.buttonText}>Show comments</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => props.setContentType("Posts")}
+      >
+        <Text style={styles.buttonText}>Show posts</Text>
       </TouchableOpacity>
 
       <TouchableOpacity
         style={styles.button}
         onPress={() => props.setContentType("Favorites")}
       >
-        <Text style={styles.buttonText}>Show Favorite Posts</Text>
+        <Text style={styles.buttonText}>Show favorite posts</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => props.setContentType("Groups")}
+      >
+        <Text style={styles.buttonText}>Show groups</Text>
       </TouchableOpacity>
 
       {props.user.username === username && (
@@ -203,9 +215,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#367CFE",
     borderRadius: 5,
     alignItems: "center",
-    marginVertical: 10,
+    marginVertical: 6,
     width: "80%",
-    padding: 12,
+    padding: 10,
   },
   buttonText: {
     color: "#FFFFFF",

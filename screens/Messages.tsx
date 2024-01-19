@@ -158,6 +158,7 @@ export default function Messages({ navigation, route }) {
 
   const conversations = [...userData].map((item) => (
     <Conversation
+      key={item}
       item={item}
       changeConv={changeConv}
       messageData={messageData[item]}

@@ -16,14 +16,14 @@ import {
 import { useState, useContext, useEffect } from "react";
 import * as ImagePicker from "expo-image-picker";
 import { JWTContext } from "../Context";
-import { getUser, getFavoritePosts } from "../Functions";
+import { getUser, getFavoritePosts, groupFindByUser } from "../Functions";
 import Feather from "react-native-vector-icons/Feather";
 import Icon from "react-native-vector-icons/AntDesign";
 import Sorter from "../components/Sorter";
 import ProfileModalActions from "../components/ProfileModActions";
 import EditBio from "../components/EditBio";
 import Comment from "../components/Comment";
-import HomePost from "../components/HomePost";
+import ProfileGroup from "../components/ProfileGroup";
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -33,7 +33,7 @@ export default function Profile({ navigation, route }) {
   const [showAdminAction, setShowAdminAction] = useState(false);
   const [showBioEdit, setShowBioEdit] = useState(false);
   const [contentType, setContentType] = useState<
-    "Posts" | "Comments" | "Favorites"
+    "Posts" | "Comments" | "Favorites" | "Groups"
   >("Posts");
   const [comments, setComments] = useState<Comment[]>([]);
   const [posts, setPosts] = useState<Post[]>([]);
@@ -41,13 +41,15 @@ export default function Profile({ navigation, route }) {
   const [profileUsername, setProfileUsername] = useState(
     route.params?.name || username
   );
-  const [favoritePosts, setFavoritePosts] = useState([]);
+  const [favoritePosts, setFavoritePosts] = useState<Post[]>([]);
+  const [userGroups, setUserGroups] = useState<Group[]>([]);
 
   async function reloadUser() {
     const res = await getUser(ip, jwt, profileUsername);
     setUser(res);
 
-    console.log(contentType);
+    let groupsWithUser = await groupFindByUser(ip, jwt, profileUsername);
+    setUserGroups(groupsWithUser);
 
     let posts = await fetch(`${ip}/post/all?username=${profileUsername}`, {
       method: "GET",
@@ -133,6 +135,10 @@ export default function Profile({ navigation, route }) {
         fetchComms={reloadUser}
       />
     );
+  };
+
+  const renderGroups = ({ item }) => {
+    return <ProfileGroup group={item} />;
   };
 
   const handleRefresh = () => {
@@ -221,9 +227,25 @@ export default function Profile({ navigation, route }) {
               onRefresh={handleRefresh}
             />
           }
+          style={{ padding: "5%" }}
         />
       )}
       {contentType === "Favorites" && <Sorter posts={favoritePosts} />}
+
+      {contentType === "Groups" && (
+        <FlatList
+          data={userGroups}
+          renderItem={renderGroups}
+          keyExtractor={(item) => item.id}
+          refreshControl={
+            <RefreshControl
+              refreshing={isRefreshing}
+              onRefresh={handleRefresh}
+            />
+          }
+          style={{ padding: "5%" }}
+        />
+      )}
 
       <EditBio
         showBioEdit={showBioEdit}

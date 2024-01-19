@@ -13,6 +13,8 @@ interface User {
   password: string;
   roles: string[];
   moderating: string[];
+  favorites: string[];
+  groups: string[];
   profileImage: string;
   bio: string;
 }

@@ -6,21 +6,27 @@ import { JWTContext } from "../Context";
 import Icon from "react-native-vector-icons/AntDesign";
 import SearchModal from "../components/SearchModal";
 import Sorter from "../components/Sorter";
+import { getUser, joinGroup, leaveGroup } from "../Functions";
 
 export default function Home() {
-  const { jwt, ip } = React.useContext(JWTContext);
+  const { jwt, ip, username } = React.useContext(JWTContext);
   const [posts, setPosts] = React.useState<Post[]>([]);
   const [isSearching, setIsSearching] = React.useState(false);
   const [aux, setAux] = React.useState(false);
   const [group, setGroup] = React.useState<Group>(null);
   const [user, setUser] = React.useState<User>(null);
+  const [searchedUser, setSearchedUser] = React.useState<User>(null);
 
   React.useEffect(() => {
     async function fetchData() {
       let address = "";
 
+      const u = await getUser(ip, jwt, username);
+      setUser(u);
+
       if (group) address = `${ip}/post/all?groupName=${group.title}`;
-      else if (user) address = `${ip}/post/all?username=${user.username}`;
+      else if (searchedUser)
+        address = `${ip}/post/all?username=${searchedUser.username}`;
       else address = `${ip}/post/all`;
 
       let posts = await fetch(address, {
@@ -35,7 +41,13 @@ export default function Home() {
       setPosts(posts);
     }
     fetchData();
-  }, [aux, group, user]);
+  }, [aux, group, searchedUser]);
+
+  const handlePress = async (type: string) => {
+    if (type === "join") await joinGroup(ip, jwt, group.id);
+    else await leaveGroup(ip, jwt, group.id);
+    setAux((prev) => !prev);
+  };
 
   return (
     <ImageBackground
@@ -45,14 +57,16 @@ export default function Home() {
       <View style={styles.topBar}>
         <TouchableOpacity
           onPress={() => {
-            setUser(null);
+            setSearchedUser(null);
             setGroup(null);
           }}
         >
           <Icon name="left" style={styles.searchIcon} />
         </TouchableOpacity>
         {group && <Text style={styles.groupName}>Group: {group.title}</Text>}
-        {user && <Text style={styles.groupName}>User: {user.username}</Text>}
+        {searchedUser && (
+          <Text style={styles.groupName}>User: {searchedUser.username}</Text>
+        )}
         <TouchableOpacity onPress={() => setIsSearching(true)}>
           <Icon name="search1" style={styles.searchIcon} />
         </TouchableOpacity>
@@ -61,6 +75,16 @@ export default function Home() {
       {group && (
         <View style={styles.secondBar}>
           <Text style={styles.groupDescription}>{group.description}</Text>
+          <Text
+            style={styles.groupDescription}
+            onPress={() =>
+              handlePress(user.groups.includes(group.id) ? "leave" : "join")
+            }
+          >
+            {user.groups.includes(group.id)
+              ? "Click here to leave group"
+              : "Click here to join group"}
+          </Text>
         </View>
       )}
 
@@ -69,7 +93,7 @@ export default function Home() {
           closeSearchModal={() => setIsSearching(false)}
           searchResult={(group, user) => {
             setGroup(group);
-            setUser(user);
+            setSearchedUser(user);
             setIsSearching(false);
           }}
         />
@@ -103,7 +127,7 @@ const styles = StyleSheet.create({
   groupName: {
     fontSize: 24,
     fontWeight: "bold",
-    color: "#367CFE",
+    color: "white",
   },
   secondBar: {
     alignItems: "center",
@@ -111,7 +135,7 @@ const styles = StyleSheet.create({
   },
   groupDescription: {
     fontSize: 16,
-    color: "#367CFE",
+    color: "white",
     textAlign: "center",
   },
   button: {
