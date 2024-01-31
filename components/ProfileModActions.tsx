@@ -175,12 +175,14 @@ export default function ProfileModalActions(props: ProfileModActionProps) {
         <Text style={styles.buttonText}>Show posts</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => props.setContentType("Favorites")}
-      >
-        <Text style={styles.buttonText}>Show favorite posts</Text>
-      </TouchableOpacity>
+      {username === props.user.username && (
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => props.setContentType("Favorites")}
+        >
+          <Text style={styles.buttonText}>Show favorite posts</Text>
+        </TouchableOpacity>
+      )}
 
       <TouchableOpacity
         style={styles.button}
