@@ -5,8 +5,8 @@ import Constants from "expo-constants";
 const JWTContext = React.createContext(null);
 
 function JWTProvider(props) {
-  const { manifest } = Constants;
-  const ip = `http://${manifest.debuggerHost.split(":").shift()}:8080`;
+  const { expoConfig } = Constants;
+  const ip = `http://${expoConfig.hostUri.split(":").shift()}:8080`;
   const [jwt, setJwt] = useState<string | null>(null);
   const [username, setUsername] = useState<string>(null);
 
