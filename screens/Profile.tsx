@@ -24,6 +24,7 @@ import ProfileModalActions from "../components/ProfileModActions";
 import EditBio from "../components/EditBio";
 import Comment from "../components/Comment";
 import ProfileGroup from "../components/ProfileGroup";
+import { useFocusEffect } from "@react-navigation/native";
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -38,9 +39,7 @@ export default function Profile({ navigation, route }) {
   const [comments, setComments] = useState<Comment[]>([]);
   const [posts, setPosts] = useState<Post[]>([]);
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const [profileUsername, setProfileUsername] = useState(
-    route.params?.name || username
-  );
+  const [profileUsername, setProfileUsername] = useState(username);
   const [favoritePosts, setFavoritePosts] = useState<Post[]>([]);
   const [userGroups, setUserGroups] = useState<Group[]>([]);
 
@@ -147,6 +146,8 @@ export default function Profile({ navigation, route }) {
     setIsRefreshing(false);
   };
 
+  console.log(contentType);
+
   return (
     <ImageBackground
       source={require("../assets/Background.jpeg")}
@@ -173,7 +174,10 @@ export default function Profile({ navigation, route }) {
             {profileUsername !== username && (
               <TouchableOpacity
                 style={{ marginRight: 10 }}
-                onPress={() => setProfileUsername(username)}
+                onPress={() => {
+                  route.params.name = undefined;
+                  setProfileUsername(username);
+                }}
               >
                 <Icon name="left" size={24} />
               </TouchableOpacity>
@@ -214,7 +218,9 @@ export default function Profile({ navigation, route }) {
         />
       )}
 
-      {contentType === "Posts" && <Sorter posts={posts} />}
+      {contentType === "Posts" && (
+        <Sorter handleRefreshProp={handleRefresh} posts={posts} />
+      )}
 
       {contentType === "Comments" && (
         <FlatList
@@ -230,7 +236,9 @@ export default function Profile({ navigation, route }) {
           style={{ padding: "5%" }}
         />
       )}
-      {contentType === "Favorites" && <Sorter posts={favoritePosts} />}
+      {contentType === "Favorites" && (
+        <Sorter handleRefreshProp={handleRefresh} posts={favoritePosts} />
+      )}
 
       {contentType === "Groups" && (
         <FlatList

@@ -14,6 +14,7 @@ import PostModal from "./PostModal";
 interface SorterProps {
   posts: Post[];
   setAux?: (boolean) => void;
+  handleRefreshProp?: () => void;
 }
 
 export default function Sorter(props: SorterProps) {
@@ -36,8 +37,8 @@ export default function Sorter(props: SorterProps) {
             title={listItem.item.title}
             content={listItem.item.content}
             postCreatedAt={listItem.item.postCreatedAt}
-            group = {listItem.item.group}
-            username = {listItem.item.username}
+            group={listItem.item.group}
+            username={listItem.item.username}
           />
         </Animated.View>
       </TouchableWithoutFeedback>
@@ -93,7 +94,11 @@ export default function Sorter(props: SorterProps) {
           refreshControl={
             <RefreshControl
               refreshing={isRefreshing}
-              onRefresh={handleRefresh}
+              onRefresh={
+                props.handleRefreshProp
+                  ? props.handleRefreshProp
+                  : handleRefresh
+              }
             />
           }
         />

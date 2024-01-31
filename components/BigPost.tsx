@@ -228,7 +228,8 @@ const styles = StyleSheet.create({
     borderColor: "#555",
     width: "100%",
     marginTop: 15,
-    marginLeft: 25,
+    marginVertical: 25,
     paddingVertical: 5,
+    textAlign: "center",
   },
 });

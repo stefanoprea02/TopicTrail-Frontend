@@ -32,7 +32,8 @@
     "typescript": "^5.3.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.0"
+    "@babel/core": "^7.20.0",
+    "@types/react-native-event-source": "^1.1.2"
   },
   "resolutions": {
     "@types/react": "17.0.43"
